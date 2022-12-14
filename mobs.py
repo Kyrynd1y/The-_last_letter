@@ -5,6 +5,7 @@ import pygame
 
 fps = 60
 
+
 class Mob(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
         super().__init__(*groups)

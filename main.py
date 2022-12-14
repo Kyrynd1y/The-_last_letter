@@ -1,12 +1,15 @@
 import sys
 import pygame
+import os
 
 import mobs
 from mobs import *
+from world import *
 
 pygame.init()
 size = width, height = 500, 500
 screen = pygame.display.set_mode(size)
+
 
 # animation_set = [pygame.image.load(f"r{i}.png") for i in range(1, 4)]
 
@@ -23,6 +26,7 @@ while True:
             sys.exit()
 
     window.fill((0, 0, 0))
+    window.blit(background, (0, 0))
     all_sprites.update()
     all_sprites.draw(screen)
     pygame.display.flip()
