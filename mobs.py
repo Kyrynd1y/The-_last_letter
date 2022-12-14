@@ -5,6 +5,10 @@ import pygame
 
 fps = 60
 
+for filename in os.listdir('data/idle'):
+    a = pygame.image.load(f'data/idle/{filename}')
+    pygame.transform.scale(a, (200, 200))
+
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):

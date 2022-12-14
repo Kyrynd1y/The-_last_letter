@@ -10,7 +10,6 @@ pygame.init()
 size = width, height = 500, 500
 screen = pygame.display.set_mode(size)
 
-
 # animation_set = [pygame.image.load(f"r{i}.png") for i in range(1, 4)]
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
