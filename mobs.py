@@ -12,7 +12,7 @@ class Mob(pygame.sprite.Sprite):
         self.status = "idle"
         self.hp = 100
         self.coef = 0
-        self.load_image("adventurer-stand-0.png")
+        self.load_image("adventurer-idle-0.png")
         self.name = "mob"
 
     def move(self, direction):
@@ -23,16 +23,16 @@ class Mob(pygame.sprite.Sprite):
 
     def load_image(self, name_picture):
         fullname = os.path.join('data', self.status, name_picture)
-        print(fullname)
         if not os.path.isfile(fullname):
             self.coef = 0
             self.update_image()
+            return
         image = pygame.image.load(fullname)
         image = image.convert_alpha()
         self.image = image
 
     def update_image(self):
-        name_picture = "-".join((self.name, self.status, str(self.coef)))
+        name_picture = "-".join((self.name, self.status, str(self.coef))) + ".png"
         self.coef += 1
         self.load_image(name_picture)
 

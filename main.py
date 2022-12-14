@@ -15,7 +15,7 @@ all_sprites = pygame.sprite.Group()
 hero = mobs.Hero(100, 100, all_sprites)
 clock = pygame.time.Clock()
 
-i = 0
+fps = 60
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -26,4 +26,4 @@ while True:
     all_sprites.update()
     all_sprites.draw(screen)
     pygame.display.flip()
-    clock.tick(60)
+    clock.tick(fps)
