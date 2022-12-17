@@ -19,10 +19,12 @@ class Mob(pygame.sprite.Sprite):
         self.status = "idle"
         self.hp = 100
         self.coef = 0
-        self.load_image("adventurer-idle-00.png")
         self.name = ""
+        self.direction = True
+        self.prev_status = self.status
+        self.load_image("adventurer-idle-00.png")
 
-    def move(self, direction):
+    def move(self, keys):
         pass
 
     def attack(self):
@@ -35,6 +37,8 @@ class Mob(pygame.sprite.Sprite):
             self.update_image()
             return
         image = pygame.image.load(fullname)
+        if not self.direction:
+            image = pygame.transform.flip(image, True, False)
         image = image.convert_alpha()
         self.image = image
 
@@ -50,28 +54,41 @@ class Hero(Mob):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        self.jump_coords = self.rect.y
         self.name = 'adventurer'
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            self.rect.y -= 1
-            self.status = "run"
-        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= 1
-            self.status = "run"
-        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            self.rect.y += 1
-            self.status = "run"
-        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += 1
-            self.status = "run"
-        else:
-            self.status = "idle"
-        if self.ticks / fps >= 0.2:
+        self.move(keys)
+        if self.status != self.prev_status:
+            self.ticks = 0
+            self.prev_status = self.status
+        if self.ticks / fps >= 0.2 or self.ticks / fps == 0:
             self.update_image()
             self.ticks = 0
         self.ticks += 1
+
+    def move(self, keys):
+        if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
+            self.jump_coords = self.rect.y - 30
+            self.status = "jump"
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            self.rect.x -= 1
+            self.direction = False
+            self.status = "run"
+        elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            pass
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            self.rect.x += 1
+            self.direction = True
+            self.status = "run"
+        else:
+            self.status = "idle"
+        if self.jump_coords < self.rect.y:
+            self.rect.y -= 2
+            self.status = "jump"
+        if self.jump_coords >= self.rect.y or self.prev_status == "fall":
+            pass
 
 
 class Enemies(Mob):
