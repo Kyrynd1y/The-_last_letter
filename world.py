@@ -4,7 +4,7 @@ import mobs
 from mobs import *
 
 background = pygame.image.load('data/landshaft/BG1.png')
-background = pygame.transform.scale(background, (1600, 900))
+background = pygame.transform.scale(background, (1920, 1080))
 
 platform = pygame.image.load('data/landshaft/Platform_combo_1.png')
 
