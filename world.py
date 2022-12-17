@@ -6,6 +6,7 @@ from mobs import *
 background = pygame.image.load('data/landshaft/BG1.png')
 background = pygame.transform.scale(background, (1600, 900))
 
+platform = pygame.image.load('data/landshaft/Platform1.png')
 
 
 class World:
@@ -16,3 +17,4 @@ class World:
         all_sprites = pygame.sprite.Group()
         hero = self.hero(all_sprites)
         all_sprites.update()
+
