@@ -14,10 +14,7 @@ class Platform(pygame.sprite.Sprite):
         super().__init__(land_sprites)
         self.image = pygame.image.load('data/landshaft/Platform_combo_1.png')
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        print(self.rect.topleft)
-        print(self.rect.bottomright)
+        self.rect.topleft = x, y
 
 
 

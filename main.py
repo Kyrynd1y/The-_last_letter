@@ -12,9 +12,11 @@ window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 
-hero = mobs.Hero(100, 100, mob_sprites, land_sprites)
+hero = mobs.Hero(100, 200, 'adventurer', mob_sprites, land_sprites)
 clock = pygame.time.Clock()
 land = world.Platform(100, 200, land_sprites)
+land2 = world.Platform(500, 200, land_sprites)
+zombie = mobs.Enemies(500, 201, 'skeleton', mob_sprites, land_sprites)
 
 fps = 60
 while True:

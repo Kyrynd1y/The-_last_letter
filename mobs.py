@@ -8,27 +8,22 @@ from data import lst_images, statuses, names
 
 fps = 60
 
-for filename in os.listdir('data/idle'):
-    a = pygame.image.load(f'data/idle/{filename}')
-    pygame.transform.scale(a, (200, 200))
-
 
 class Mob(pygame.sprite.Sprite):
-    def __init__(self, x, y, *groups):
-        super().__init__(*groups)
+    def __init__(self, x, y, name, mob_sprites, land_sprites):
+        super().__init__(mob_sprites, land_sprites)
         self.ticks = 0
         self.status = "idle"
         self.hp = 100
         self.coef = 0
-        self.name = ""
+        self.name = name
         self.direction = True
         self.prev_status = self.status
-        self.image = lst_images[0][0][0]
+        self.image = lst_images[names.index(self.name)][0][0]
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+        self.rect.bottomleft = x, y
 
-    def move(self, keys):
+    def move(self):
         pass
 
     def attack(self):
@@ -45,11 +40,10 @@ class Mob(pygame.sprite.Sprite):
 
 
 class Hero(Mob):
-    def __init__(self, x, y, mob_sprites, land_sprites):
-        super().__init__(x, y, mob_sprites, land_sprites)
+    def __init__(self, x, y, name, mob_sprites, land_sprites):
+        super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
-        self.name = 'adventurer'
         self.jumo_opportunity = True
 
     def update(self) -> None:
@@ -92,8 +86,30 @@ class Hero(Mob):
 
 
 class Enemies(Mob):
-    def move(self, direction):
-        if direction == 'right':  # условие для остановки будет отслеживаться в main
-            self.x += 10
-        if direction == 'left':
-            self.x -= 10
+    def __init__(self, x, y, name, mob_sprites, land_sprites):
+        super().__init__(x, y, name, mob_sprites, land_sprites)
+        self.land_sprites = land_sprites
+        self.direction = True
+
+    def update(self) -> None:
+        self.move()
+        if self.status != self.prev_status:
+            self.ticks = 0
+            self.prev_status = self.status
+        if self.ticks / fps >= 0.2 or self.ticks / fps == 0:
+            self.update_image()
+            self.ticks = 0
+        self.ticks += 1
+
+    def move(self):
+        collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
+        if len(collide_sprites) != 1 and collide_sprites[0].rect.left == self.rect.left:
+            self.direction = True
+        elif len(collide_sprites) != 1 and collide_sprites[0].rect.right == self.rect.right:
+            self.direction = False
+        if self.direction:
+            self.rect.x += 1
+            self.status = "run"
+        else:
+            self.rect.x -= 1
+            self.status = "run"
