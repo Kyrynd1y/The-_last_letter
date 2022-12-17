@@ -6,7 +6,7 @@ from mobs import *
 background = pygame.image.load('data/landshaft/BG1.png')
 background = pygame.transform.scale(background, (1600, 900))
 
-platform = pygame.image.load('data/landshaft/Platform1.png')
+platform = pygame.image.load('data/landshaft/Platform_combo_1.png')
 
 
 class World:
