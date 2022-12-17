@@ -3,19 +3,18 @@ import pygame
 import os
 
 import mobs
-from mobs import *
+import world
 from world import *
 
 pygame.init()
-size = width, height = 500, 500
-screen = pygame.display.set_mode(size)
-
-# animation_set = [pygame.image.load(f"r{i}.png") for i in range(1, 4)]
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-all_sprites = pygame.sprite.Group()
-hero = mobs.Hero(100, 100, all_sprites)
+mob_sprites = pygame.sprite.Group()
+land_sprites = pygame.sprite.Group()
+
+hero = mobs.Hero(100, 100, mob_sprites, land_sprites)
 clock = pygame.time.Clock()
+land = world.Platform(100, 200, land_sprites)
 
 fps = 60
 while True:
@@ -26,8 +25,10 @@ while True:
 
     window.fill((0, 0, 0))
     window.blit(background, (0, 0))
-    window.blit(platform, (100, 100))
-    all_sprites.update()
-    all_sprites.draw(screen)
+    #window.blit(platform, (100, 100))
+    land_sprites.update()
+    mob_sprites.update()
+    land_sprites.draw(window)
+    mob_sprites.draw(window)
     pygame.display.flip()
     clock.tick(fps)

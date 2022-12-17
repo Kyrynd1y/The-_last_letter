@@ -9,12 +9,16 @@ background = pygame.transform.scale(background, (1920, 1080))
 platform = pygame.image.load('data/landshaft/Platform_combo_1.png')
 
 
-class World:
-    def __init__(self):
-        self.hero = mobs.Hero(100, 100)
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, x, y, land_sprites):
+        super().__init__(land_sprites)
+        self.image = pygame.image.load('data/landshaft/Platform_combo_1.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        print(self.rect.topleft)
+        print(self.rect.bottomright)
 
-    def render(self):
-        all_sprites = pygame.sprite.Group()
-        hero = self.hero(all_sprites)
-        all_sprites.update()
+
+
 

@@ -2,6 +2,9 @@ import os
 import sys
 
 import pygame
+from data import lst_images, statuses, names
+
+# from main import land_sprites
 
 fps = 60
 
@@ -14,15 +17,16 @@ class Mob(pygame.sprite.Sprite):
     def __init__(self, x, y, *groups):
         super().__init__(*groups)
         self.ticks = 0
-        self.x = x
-        self.y = y
         self.status = "idle"
         self.hp = 100
         self.coef = 0
         self.name = ""
         self.direction = True
         self.prev_status = self.status
-        self.load_image("adventurer-idle-00.png")
+        self.image = lst_images[0][0][0]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
     def move(self, keys):
         pass
@@ -30,32 +34,23 @@ class Mob(pygame.sprite.Sprite):
     def attack(self):
         pass
 
-    def load_image(self, name_picture):
-        fullname = os.path.join('data', self.status, name_picture)
-        if not os.path.isfile(fullname):
+    def update_image(self):
+        self.coef += 1
+        if self.coef > len(lst_images[names.index(self.name)][statuses.index(self.status)]) - 1:
             self.coef = 0
-            self.update_image()
-            return
-        image = pygame.image.load(fullname)
+        image = lst_images[names.index(self.name)][statuses.index(self.status)][self.coef]
         if not self.direction:
             image = pygame.transform.flip(image, True, False)
-        image = image.convert_alpha()
         self.image = image
-
-    def update_image(self):
-        name_picture = "-".join((self.name, self.status, "0" + str(self.coef))) + ".png"
-        self.coef += 1
-        self.load_image(name_picture)
 
 
 class Hero(Mob):
-    def __init__(self, x, y, *groups):
-        super().__init__(x, y, *groups)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    def __init__(self, x, y, mob_sprites, land_sprites):
+        super().__init__(x, y, mob_sprites, land_sprites)
+        self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
         self.name = 'adventurer'
+        self.jumo_opportunity = True
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
@@ -69,9 +64,9 @@ class Hero(Mob):
         self.ticks += 1
 
     def move(self, keys):
-        if keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]:
+        if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jumo_opportunity:
             self.jump_coords = self.rect.y - 30
-            self.status = "jump"
+            self.jumo_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= 1
             self.direction = False
@@ -85,10 +80,15 @@ class Hero(Mob):
         else:
             self.status = "idle"
         if self.jump_coords < self.rect.y:
-            self.rect.y -= 2
+            self.rect.y -= 1
             self.status = "jump"
-        if self.jump_coords >= self.rect.y or self.prev_status == "fall":
-            pass
+        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status != "jump" and len(
+                pygame.sprite.spritecollide(self, self.land_sprites, False)) == 1:
+            self.rect.y += 1
+            self.jump_coords = self.rect.y
+            self.status = "fall"
+        elif self.prev_status != 'jump':
+            self.jumo_opportunity = True
 
 
 class Enemies(Mob):
