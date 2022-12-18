@@ -28,6 +28,8 @@ while True:
 
     window.fill((0, 0, 0))
     window.blit(background, (0, 0))
+    window.blit(background2, (0, 0))
+    window.blit(background3, (0, 0))
     #window.blit(platform, (100, 100))
     land_sprites.update()
     mob_sprites.update()
