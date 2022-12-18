@@ -18,6 +18,7 @@ land = world.Platform(100, 200, land_sprites)
 land2 = world.Platform(500, 200, land_sprites)
 zombie = mobs.Enemies(500, 201, 'skeleton', mob_sprites, land_sprites)
 
+
 fps = 60
 while True:
     for event in pygame.event.get():

@@ -19,3 +19,4 @@ for j in range(len(names)):
                 break
             image = pygame.image.load(fullname)
             lst_images[j][i].append(image)
+

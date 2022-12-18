@@ -101,6 +101,7 @@ class Enemies(Mob):
             self.ticks = 0
         self.ticks += 1
 
+
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
         if len(collide_sprites) != 1 and collide_sprites[0].rect.left == self.rect.left:
