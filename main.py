@@ -23,7 +23,7 @@ for i in data.coords_platform:
     image = i[2]
     world.Platform(pos, data.platform_images[image], land_sprites)
 for i in data.landshaft_images:
-    world.Platform((0, 0), i, land_sprites, window.get_rect())
+    world.Platform((0, 0), i, land_sprites, window.get_size())
 
 fps = 60
 while True:
