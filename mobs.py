@@ -2,7 +2,7 @@ import os
 import sys
 
 import pygame
-from data import lst_images, statuses, names
+from data import mobs_images, statuses, names
 
 # from main import land_sprites
 
@@ -19,7 +19,7 @@ class Mob(pygame.sprite.Sprite):
         self.name = name
         self.direction = True
         self.prev_status = self.status
-        self.image = lst_images[names.index(self.name)][0][0]
+        self.image = mobs_images[names.index(self.name)][0][0]
         self.rect = self.image.get_rect()
         self.rect.bottomleft = x, y
 
@@ -31,9 +31,9 @@ class Mob(pygame.sprite.Sprite):
 
     def update_image(self):
         self.coef += 1
-        if self.coef > len(lst_images[names.index(self.name)][statuses.index(self.status)]) - 1:
+        if self.coef > len(mobs_images[names.index(self.name)][statuses.index(self.status)]) - 1:
             self.coef = 0
-        image = lst_images[names.index(self.name)][statuses.index(self.status)][self.coef]
+        image = mobs_images[names.index(self.name)][statuses.index(self.status)][self.coef]
         if not self.direction:
             image = pygame.transform.flip(image, True, False)
         self.image = image
