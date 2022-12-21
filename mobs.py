@@ -84,6 +84,9 @@ class Hero(Mob):
         elif self.prev_status != 'jump':
             self.jumo_opportunity = True
 
+    def draw_radius(self, surface):
+        pygame.draw.circle(surface, 'white', self.rect.center, 40, 1)
+
 
 class Enemies(Mob):
     def __init__(self, x, y, name, mob_sprites, land_sprites):
@@ -113,3 +116,6 @@ class Enemies(Mob):
         else:
             self.rect.x -= 1
             self.status = "run"
+
+    def draw_radius(self, surface):
+        pygame.draw.circle(surface, 'red', self.rect.center, 40, 1)
