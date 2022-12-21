@@ -13,19 +13,14 @@ pygame.init()
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
-data.load_images()
 
 hero = mobs.Hero(100, 200, 'adventurer', mob_sprites, land_sprites)
 clock = pygame.time.Clock()
-land = world.Platform(100, 200, land_sprites)
-land2 = world.Platform(500, 200, land_sprites)
 zombie = mobs.Enemies(500, 201, 'skeleton', mob_sprites, land_sprites)
 for i in data.coords_platform:
     pos = (i[0], i[1])
     image = i[2]
     world.Platform(pos, data.platform_images[image], land_sprites)
-for i in data.landshaft_images:
-    world.Platform((0, 0), i, land_sprites, window.get_size())
 
 fps = 60
 while True:

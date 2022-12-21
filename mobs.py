@@ -114,9 +114,9 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
-        if len(collide_sprites) != 1 and collide_sprites[0].rect.left == self.rect.left:
+        if len(collide_sprites) != 1 and collide_sprites[1].rect.left == self.rect.left:
             self.direction = True
-        elif len(collide_sprites) != 1 and collide_sprites[0].rect.right == self.rect.right:
+        elif len(collide_sprites) != 1 and collide_sprites[1].rect.right == self.rect.right:
             self.direction = False
         if self.direction:
             self.rect.x += 1

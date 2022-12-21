@@ -18,18 +18,10 @@ bg.blit(background, (0, 0))
 bg.blit(background2, (0, 0))
 bg.blit(background3, (0, 0))
 
-platform = pygame.image.load('data/landshaft/Platform_combo_1.png')
-
 
 class Platform(pygame.sprite.Sprite):
-    def __init__(self, pos, image, land_sprites, *args):
+    def __init__(self, pos, image, land_sprites):
         super().__init__(land_sprites)
         self.image = image
-        if args:
-            print(args[0])
-            self.image = pygame.transform.scale(self.image, args[0])
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
-        self.image = pygame.image.load('data/landshaft/Platform_combo_1.png')
-        self.rect = self.image.get_rect()
-        self.rect.topleft = x, y
