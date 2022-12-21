@@ -17,6 +17,8 @@ data.load_images()
 
 hero = mobs.Hero(100, 200, 'adventurer', mob_sprites, land_sprites)
 clock = pygame.time.Clock()
+land = world.Platform(100, 200, land_sprites)
+land2 = world.Platform(500, 200, land_sprites)
 zombie = mobs.Enemies(500, 201, 'skeleton', mob_sprites, land_sprites)
 for i in data.coords_platform:
     pos = (i[0], i[1])
@@ -33,7 +35,11 @@ while True:
             sys.exit()
 
     window.fill((0, 0, 0))
-    # window.blit(platform, (100, 100))
+    window.blit(bg, (0, 0))
+    hero.draw_radius(window)
+    zombie.draw_radius(window)
+    if (hero.hero_x - zombie.mob_x) ** 2 + (hero.hero_y - zombie.mob_y) ** 2 <= (hero.radius + zombie.radius) ** 2:
+        print('yes')
     land_sprites.update()
     mob_sprites.update()
     land_sprites.draw(window)

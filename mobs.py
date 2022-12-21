@@ -45,6 +45,9 @@ class Hero(Mob):
         self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
         self.jumo_opportunity = True
+        self.hero_x = 0
+        self.hero_y = 0
+        self.radius = 100
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
@@ -84,12 +87,20 @@ class Hero(Mob):
         elif self.prev_status != 'jump':
             self.jumo_opportunity = True
 
+    def draw_radius(self, surface):
+        pygame.draw.circle(surface, 'white', self.rect.center, 100, 1)
+        self.hero_x = self.rect[0]
+        self.hero_y = self.rect[1]
+
 
 class Enemies(Mob):
     def __init__(self, x, y, name, mob_sprites, land_sprites):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.direction = True
+        self.mob_x = 0
+        self.mob_y = 0
+        self.radius = 100
 
     def update(self) -> None:
         self.move()
@@ -113,3 +124,9 @@ class Enemies(Mob):
         else:
             self.rect.x -= 1
             self.status = "run"
+
+    def draw_radius(self, surface):
+        pygame.draw.circle(surface, 'red', self.rect.center, 100, 1)
+        self.mob_x = self.rect[0]
+        self.mob_y = self.rect[1]
+
