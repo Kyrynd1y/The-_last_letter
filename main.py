@@ -29,9 +29,7 @@ while True:
             sys.exit()
 
     window.fill((0, 0, 0))
-    window.blit(background, (0, 0))
-    window.blit(background2, (0, 0))
-    window.blit(background3, (0, 0))
+    window.blit(bg, (0, 0))
     land_sprites.update()
     mob_sprites.update()
     land_sprites.draw(window)
