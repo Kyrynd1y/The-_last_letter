@@ -29,10 +29,11 @@ while True:
             sys.exit()
 
     window.fill((0, 0, 0))
-    window.blit(background, (0, 0))
-    window.blit(background2, (0, 0))
-    window.blit(background3, (0, 0))
-    # window.blit(platform, (100, 100))
+    window.blit(bg, (0, 0))
+    hero.draw_radius(window)
+    zombie.draw_radius(window)
+    if (hero.hero_x - zombie.mob_x) ** 2 + (hero.hero_y - zombie.mob_y) ** 2 <= (hero.radius + zombie.radius) ** 2:
+        print('yes')
     land_sprites.update()
     mob_sprites.update()
     land_sprites.draw(window)
