@@ -7,7 +7,9 @@ names = ['adventurer', 'skeleton']
 platform_images = []
 mobs_images = []
 
-coords_platform = [(100, 200, 0), (500, 200, 0), (300, 200, 0)]
+coords_platform = [(0, 825, 0), (180, 825, 0), (360, 825, 0), (540, 825, 0), (720, 825, 0),
+                   (1080, 825, 0), (360, 645, 0), (720, 465, 0),
+                   (1080, 465, 0), (1260, 465, 0), (1440, 465, 0)]
 
 coef = 0
 for j in range(len(names)):
