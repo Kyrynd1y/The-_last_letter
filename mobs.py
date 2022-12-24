@@ -98,9 +98,11 @@ class Enemies(Mob):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.direction = True
+        self.rect.bottomleft = x, y + 2
         self.mob_x = 0
         self.mob_y = 0
         self.radius = 100
+        print(self.rect.bottomleft)
 
     def update(self) -> None:
         self.move()
@@ -114,6 +116,7 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
+        print(collide_sprites)
         if len(collide_sprites) != 1 and collide_sprites[1].rect.left == self.rect.left:
             self.direction = True
         elif len(collide_sprites) != 1 and collide_sprites[1].rect.right == self.rect.right:
