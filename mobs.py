@@ -81,6 +81,7 @@ class Hero(Mob):
             self.status = "jump"
         if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status != "jump" and len(
                 pygame.sprite.spritecollide(self, self.land_sprites, False)) == 1:
+            self.jumo_opportunity = False
             self.rect.y += 1
             self.jump_coords = self.rect.y
             self.status = "fall"
