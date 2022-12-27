@@ -10,6 +10,9 @@ from data import *
 
 pygame.init()
 
+pygame.mixer.music.load("PHXNKKV_-_DEVILS_PALM_remastered_74299032.mp3")
+pygame.mixer.music.play(-1)
+
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
