@@ -10,7 +10,7 @@ from data import *
 
 pygame.init()
 
-pygame.mixer.music.load("PHXNKKV_-_DEVILS_PALM_remastered_74299032.mp3")
+pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
@@ -50,6 +50,41 @@ for i in coords_enemies:
     name = i[2]
     mobs.Enemies(*pos, name, mob_sprites, land_sprites)
 
+
+def zastavka():
+    intro_text = ["The lat letter", "",
+                  "начать игру",
+                  "настройки",
+                  "выйти из игры"]
+
+    fon = pygame.transform.scale(zastavkaImg, window.get_size())
+    window.blit(fon, (0, 0))
+    font = pygame.font.Font(None, 70)
+    text_y = 50
+    text_x = 70
+    name_game = font.render(intro_text[0], True, pygame.Color(255, 77, 213))
+    name_rect = name_game.get_rect()
+    name_rect.top = text_y
+    name_rect.x = 50
+    text_y += name_rect.height
+    window.blit(name_game, name_rect)
+
+    #if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+    #    klickPos = event.pos
+    #    if  <= klickPos[0]
+    font = pygame.font.Font(None, 60)
+    text_center = 200
+    for line in intro_text[1:]:
+        string_rendered = font.render(line, True, pygame.Color(255, 77, 213))
+        name_rect = string_rendered.get_rect()
+        text_y += 10
+        name_rect.top = text_y
+        name_rect.centerx = text_center
+        text_y += name_rect.height
+        window.blit(string_rendered, name_rect)
+
+
+begining = True
 fps = 60
 while True:
     for event in pygame.event.get():
@@ -57,15 +92,15 @@ while True:
             pygame.quit()
             sys.exit()
 
-    window.fill((0, 0, 0))
-    window.blit(bg, (0, 0))
-    hero.draw_radius(window)
-    #zombie.draw_radius(window)
-    #if (hero.hero_x - zombie.mob_x) ** 2 + (hero.hero_y - zombie.mob_y) ** 2 <= (hero.radius + zombie.radius) ** 2:
-     #   print('yes')
-    land_sprites.update()
-    mob_sprites.update()
-    land_sprites.draw(window)
-    mob_sprites.draw(window)
+    if begining:
+        zastavka()
+    else:
+        window.fill((0, 0, 0))
+        window.blit(bg, (0, 0))
+        hero.draw_radius(window)
+        land_sprites.update()
+        mob_sprites.update()
+        land_sprites.draw(window)
+        mob_sprites.draw(window)
     pygame.display.flip()
     clock.tick(fps)
