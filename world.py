@@ -1,6 +1,5 @@
 import pygame
 
-import mobs
 from mobs import *
 
 background = pygame.image.load('data/landshaft/BG1.png')
@@ -25,3 +24,5 @@ class Platform(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+
+#

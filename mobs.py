@@ -4,8 +4,6 @@ import sys
 import pygame
 from data import mobs_images, statuses, names
 
-# from main import land_sprites
-
 fps = 60
 
 
@@ -20,6 +18,7 @@ class Mob(pygame.sprite.Sprite):
         self.direction = True
         self.prev_status = self.status
         self.image = mobs_images[names.index(self.name)][0][0]
+        self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = x, y
 
@@ -36,7 +35,7 @@ class Mob(pygame.sprite.Sprite):
         image = mobs_images[names.index(self.name)][statuses.index(self.status)][self.coef]
         if not self.direction:
             image = pygame.transform.flip(image, True, False)
-        self.image = image
+        self.image = pygame.transform.scale(image, (100, 100))
 
 
 class Hero(Mob):
@@ -114,9 +113,9 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
-        if len(collide_sprites) != 1 and collide_sprites[1].rect.left == self.rect.left:
+        if len(collide_sprites) != 1 and collide_sprites[0].rect.left == self.rect.left:
             self.direction = True
-        elif len(collide_sprites) != 1 and collide_sprites[1].rect.right == self.rect.right:
+        elif len(collide_sprites) != 1 and collide_sprites[0].rect.right == self.rect.right:
             self.direction = False
         if self.direction:
             self.rect.x += 1

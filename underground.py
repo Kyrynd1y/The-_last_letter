@@ -5,21 +5,17 @@ import os
 from mobs import *
 from world import *
 from data import *
-import requests
+import random
 
-response = requests.get('https://raw.githubusercontent.com/danakt/russian-words/master/russian.txt')
-
-text = response.content.decode('cp1251')
-
-with open('russian.txt', 'wb') as ru:
-    ru.write(text.encode('utf-8'))
-
-response = requests.get('https://raw.githubusercontent.com/danakt/russian-words/master/russian_surnames.txt')
-
-text = response.content.decode('cp1251')
-
-with open('russian_surnames.txt', 'wb') as ru:
-    ru.write(text.encode('utf-8'))
+with open('RUS.txt') as f:
+    lines = [line.rstrip('\n') for line in f]
+    a = random.choice(lines)
+    temp = []
+    for i in a:
+        temp.append(i)
+    random.shuffle(temp)
+    print(a)
+    print(temp)
 
 
 class Underground(pygame.sprite.Sprite):
@@ -28,4 +24,3 @@ class Underground(pygame.sprite.Sprite):
 
 class Letters(pygame.sprite.Sprite):
     pass
-

@@ -23,6 +23,7 @@ for j in range(len(names)):
             if not os.path.isfile(fullname):
                 coef = 0
                 break
+
             image = pygame.image.load(fullname)
             mobs_images[j][i].append(image)
 while True:
@@ -31,5 +32,6 @@ while True:
     if not os.path.isfile(fullname):
         coef = 0
         break
+
     bckgrd = pygame.image.load(fullname)
     platform_images.append(bckgrd)
