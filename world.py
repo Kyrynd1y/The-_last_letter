@@ -25,4 +25,9 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
-#
+
+def TxT(text, font, color, x, y):
+    render = font.render(text, True, pygame.Color(color))
+    rect = render.get_rect()
+    rect.center = x, y
+    return render, rect

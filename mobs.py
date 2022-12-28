@@ -127,16 +127,12 @@ class Enemies(Mob):
         for i in collide_sprites:
             if i.__class__ == Platform:
                 collide = i
-        print(collide)
-        print(collide.rect.left)
-        print(self.rect.left)
-        print('----------------------------')
-        if collide and collide.rect.left == self.rect.left:
+        if collide and collide.rect.left <= self.rect.left:
             self.allowance += 1
             if self.allowance == 2:
                 self.direction = True
                 self.allowance = 0
-        elif len(collide_sprites) != 1 and collide.rect.right == self.rect.right:
+        elif len(collide_sprites) != 1 and collide.rect.right >= self.rect.right:
             self.allowance += 1
             if self.allowance == 2:
                 self.direction = False
