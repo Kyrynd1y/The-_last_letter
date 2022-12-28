@@ -3,6 +3,7 @@ import sys
 
 import pygame
 from data import mobs_images, statuses, names
+from world import Platform
 
 fps = 60
 
@@ -60,9 +61,13 @@ class Hero(Mob):
         self.ticks += 1
 
     def move(self, keys):
-        if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jumo_opportunity:
+        collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
+        for i in collide_sprites:
+            if i.__class__ == Platform:
+                self.jump_opportunity = False
+        if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jump_opportunity:
             self.jump_coords = self.rect.y - 30
-            self.jumo_opportunity = False
+            self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= 1
             self.direction = False
@@ -78,13 +83,13 @@ class Hero(Mob):
         if self.jump_coords < self.rect.y:
             self.rect.y -= 1
             self.status = "jump"
-        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status != "jump" and len(
-                pygame.sprite.spritecollide(self, self.land_sprites, False)) == 1:
+        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status == "fall" or self.prev_status == "fall":
+            self.jumo_opportunity = False
             self.rect.y += 1
             self.jump_coords = self.rect.y
             self.status = "fall"
         elif self.prev_status != 'jump':
-            self.jumo_opportunity = True
+            self.jump_opportunity = True
 
     def draw_radius(self, surface):
         pygame.draw.circle(surface, 'white', self.rect.center, 100, 1)
@@ -97,9 +102,11 @@ class Enemies(Mob):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.direction = True
+        self.rect.bottomleft = x, y + 2
         self.mob_x = 0
         self.mob_y = 0
         self.radius = 100
+        print(self.rect.bottomleft)
 
     def update(self) -> None:
         self.move()
@@ -113,9 +120,13 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
-        if len(collide_sprites) != 1 and collide_sprites[0].rect.left == self.rect.left:
+        print(collide_sprites)
+        for i in collide_sprites:
+            if i.__class__ == Platform:
+                collide = i
+        if len(collide_sprites) != 1 and collide.rect.left == self.rect.left:
             self.direction = True
-        elif len(collide_sprites) != 1 and collide_sprites[0].rect.right == self.rect.right:
+        elif len(collide_sprites) != 1 and collide.rect.right == self.rect.right:
             self.direction = False
         if self.direction:
             self.rect.x += 1
@@ -128,4 +139,3 @@ class Enemies(Mob):
         pygame.draw.circle(surface, 'red', self.rect.center, 100, 1)
         self.mob_x = self.rect[0]
         self.mob_y = self.rect[1]
-

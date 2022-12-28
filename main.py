@@ -97,7 +97,7 @@ while True:
     else:
         window.fill((0, 0, 0))
         window.blit(bg, (0, 0))
-        hero.draw_radius(window)
+        #hero.draw_radius(window)
         land_sprites.update()
         mob_sprites.update()
         land_sprites.draw(window)
