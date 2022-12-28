@@ -36,7 +36,7 @@ coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 1, y_w * 19, 0), (x_w * 2, y_w
                    (x_w * 17, y_w * 19, 0), (x_w * 18, y_w * 19, 0), (x_w * 19, y_w * 19, 0),
                    (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
 
-coords_enemies = [(x_w * 14, y_w * 5, 'skeleton')]
+coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
 
 for i in coords_platform:
     pos = (i[0], i[1])
@@ -88,10 +88,8 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
-            print("here")
             klickPos = event.pos
             begining = False
-            print(begining)
     if begining:
         zastavka()
     else:

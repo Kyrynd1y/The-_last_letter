@@ -44,7 +44,7 @@ class Hero(Mob):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
-        self.jumo_opportunity = True
+        self.jump_opportunity = True
         self.hero_x = 0
         self.hero_y = 0
         self.radius = 100
@@ -55,18 +55,20 @@ class Hero(Mob):
         if self.status != self.prev_status:
             self.ticks = 0
             self.prev_status = self.status
-        if self.ticks / fps >= 0.2 or self.ticks / fps == 0:
+        if self.ticks / fps >= 0.3 or self.ticks / fps == 0:
             self.update_image()
             self.ticks = 0
         self.ticks += 1
 
     def move(self, keys):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
+        is_collide = False
         for i in collide_sprites:
             if i.__class__ == Platform:
-                self.jump_opportunity = False
+                is_collide = True
+                self.jump_opportunity = True
         if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jump_opportunity:
-            self.jump_coords = self.rect.y - 30
+            self.jump_coords = self.rect.y - 60
             self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.rect.x -= 1
@@ -83,8 +85,9 @@ class Hero(Mob):
         if self.jump_coords < self.rect.y:
             self.rect.y -= 1
             self.status = "jump"
-        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status == "fall" or self.prev_status == "fall":
-            self.jumo_opportunity = False
+        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status == "fall" or self.prev_status\
+                == "fall" and not is_collide:
+            self.jump_opportunity = False
             self.rect.y += 1
             self.jump_coords = self.rect.y
             self.status = "fall"
@@ -101,12 +104,12 @@ class Enemies(Mob):
     def __init__(self, x, y, name, mob_sprites, land_sprites):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
-        self.direction = True
+        self.direction = False
         self.rect.bottomleft = x, y + 2
         self.mob_x = 0
         self.mob_y = 0
         self.radius = 100
-        print(self.rect.bottomleft)
+        self.allowance = 0
 
     def update(self) -> None:
         self.move()
@@ -120,14 +123,24 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
-        print(collide_sprites)
+        collide = None
         for i in collide_sprites:
             if i.__class__ == Platform:
                 collide = i
-        if len(collide_sprites) != 1 and collide.rect.left == self.rect.left:
-            self.direction = True
+        print(collide)
+        print(collide.rect.left)
+        print(self.rect.left)
+        print('----------------------------')
+        if collide and collide.rect.left == self.rect.left:
+            self.allowance += 1
+            if self.allowance == 2:
+                self.direction = True
+                self.allowance = 0
         elif len(collide_sprites) != 1 and collide.rect.right == self.rect.right:
-            self.direction = False
+            self.allowance += 1
+            if self.allowance == 2:
+                self.direction = False
+                self.allowance = 0
         if self.direction:
             self.rect.x += 1
             self.status = "run"
