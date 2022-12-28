@@ -17,12 +17,12 @@ window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 
-
 clock = pygame.time.Clock()
 
 x_w, y_w = window.get_size()
 x_w = x_w / 20
 y_w = y_w / 20
+begining = True
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites)
 
@@ -69,9 +69,6 @@ def zastavka():
     text_y += name_rect.height
     window.blit(name_game, name_rect)
 
-    #if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
-    #    klickPos = event.pos
-    #    if  <= klickPos[0]
     font = pygame.font.Font(None, 60)
     text_center = 200
     for line in intro_text[1:]:
@@ -84,14 +81,17 @@ def zastavka():
         window.blit(string_rendered, name_rect)
 
 
-begining = True
 fps = 60
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             pygame.quit()
             sys.exit()
-
+        if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+            print("here")
+            klickPos = event.pos
+            begining = False
+            print(begining)
     if begining:
         zastavka()
     else:
