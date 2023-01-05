@@ -7,7 +7,6 @@ import mobs
 import world
 from world import *
 from data import *
-from underground import *
 
 pygame.init()
 
@@ -147,7 +146,7 @@ while True:
     else:
         window.fill((0, 0, 0))
         window.blit(bg, (0, 0))
-        Letters.draw_letters()
+        # hero.draw_radius(window)
         land_sprites.update()
         mob_sprites.update()
         land_sprites.draw(window)

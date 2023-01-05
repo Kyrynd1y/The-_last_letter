@@ -68,27 +68,27 @@ class Hero(Mob):
                 is_collide = True
                 self.jump_opportunity = True
         if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jump_opportunity:
-            self.jump_coords = self.rect.y - 60
+            self.jump_coords = self.rect.y - 100
             self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= 1
+            self.rect.x -= 2
             self.direction = False
             self.status = "run"
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             pass
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += 1
+            self.rect.x += 2
             self.direction = True
             self.status = "run"
         else:
             self.status = "idle"
         if self.jump_coords < self.rect.y:
-            self.rect.y -= 1
+            self.rect.y -= 1.5
             self.status = "jump"
         if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status == "fall" or self.prev_status\
                 == "fall" and not is_collide:
             self.jump_opportunity = False
-            self.rect.y += 1
+            self.rect.y += 2
             self.jump_coords = self.rect.y
             self.status = "fall"
         elif self.prev_status != 'jump':
@@ -126,7 +126,8 @@ class Enemies(Mob):
         collide = None
         for i in collide_sprites:
             if i.__class__ == Platform:
-                collide = i
+                collide = collide_sprites[1]
+                break
         if collide and collide.rect.left <= self.rect.left:
             self.allowance += 1
             if self.allowance == 2:
