@@ -11,6 +11,8 @@ background2 = pygame.transform.scale(background2, (1920, 1080))
 background3 = pygame.image.load('data/landshaft/BG3.png')
 background3 = pygame.transform.scale(background3, (1920, 1080))
 
+un_background = pygame.image.load('data/landshaft/space.png')
+
 bg = pygame.Surface((1920, 1080))
 
 bg.blit(background, (0, 0))
