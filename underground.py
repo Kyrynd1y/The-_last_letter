@@ -34,3 +34,5 @@ class Letters(pygame.sprite.Sprite):
             pygame.transform.scale(letter, (60, 60))
             screen.blit(letter, (x, y))
             x += 60
+
+#
