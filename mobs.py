@@ -67,7 +67,6 @@ class Hero(Mob):
         for i in collide_sprites:
             if i.__class__ == Platform:
                 lst_platforms.append(i)
-        # потом убрать
         for i in lst_platforms:
             if i.rect.top == self.rect.bottom - 2:
                 is_collide = True
@@ -79,7 +78,8 @@ class Hero(Mob):
             self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             for i in lst_platforms:
-                if (self.rect.bottom >= i.rect.top >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
+                if (
+                        self.rect.bottom >= i.rect.top + 3 >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
                         and self.rect.x + 2 == i.rect.right:
                     break
             else:
@@ -90,7 +90,8 @@ class Hero(Mob):
             pass
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             for i in lst_platforms:
-                if (self.rect.bottom >= i.rect.top >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
+                if (
+                        self.rect.bottom >= i.rect.top + 3 >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
                         and self.rect.right - 2 == i.rect.x:
                     break
             else:
@@ -101,7 +102,7 @@ class Hero(Mob):
             self.status = "idle"
         if self.jump_coords < self.rect.y:
             for i in lst_platforms:
-                if self.rect.bottom >= i.rect.bottom >= self.rect.y:
+                if self.rect.center[1] >= i.rect.bottom >= self.rect.y:
                     break
             else:
                 self.rect.y -= 1.5
@@ -147,21 +148,13 @@ class Enemies(Mob):
 
     def move(self):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
-        collide = None
+        lst_platforms = []
         for i in collide_sprites:
             if i.__class__ == Platform:
-                collide = collide_sprites[1]
-                break
-        if collide and collide.rect.left <= self.rect.left:
-            self.allowance += 1
-            if self.allowance == 2:
-                self.direction = True
-                self.allowance = 0
-        elif len(collide_sprites) != 1 and collide.rect.right >= self.rect.right:
-            self.allowance += 1
-            if self.allowance == 2:
-                self.direction = False
-                self.allowance = 0
+                lst_platforms.append(i)
+
+        if len(lst_platforms) == 1 and collide_sprites[0].rect.x == self.rect.x:
+            self.direction = not self.direction
         if self.direction:
             self.rect.x += 1
             self.status = "run"
