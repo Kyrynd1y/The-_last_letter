@@ -7,11 +7,11 @@ import mobs
 import world
 from world import *
 from data import *
-
 pygame.init()
 
 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0)
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
@@ -25,17 +25,12 @@ y_w = y_w / 20
 
 begining = True
 menu_bool = False
+settings_bool = False
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites)
 
-coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 1, y_w * 19, 0), (x_w * 2, y_w * 19, 0),
-                   (x_w * 3, y_w * 19, 0), (x_w * 4, y_w * 19, 0), (x_w * 5, y_w * 19, 0),
-                   (x_w * 6, y_w * 19, 0), (x_w * 7, y_w * 19, 0), (x_w * 8, y_w * 19, 0),
-                   (x_w * 7, y_w * 19, 0), (x_w * 8, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
-                   (x_w * 8, y_w * 19, 0), (x_w * 9, y_w * 19, 0), (x_w * 10, y_w * 19, 0),
-                   (x_w * 11, y_w * 19, 0), (x_w * 12, y_w * 19, 0), (x_w * 13, y_w * 19, 0),
-                   (x_w * 14, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 16, y_w * 19, 0),
-                   (x_w * 17, y_w * 19, 0), (x_w * 18, y_w * 19, 0), (x_w * 19, y_w * 19, 0),
+coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
+                   (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0), (x_w * 19, y_w * 19, 0),
                    (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
 
 coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
@@ -54,45 +49,88 @@ for i in coords_enemies:
 
 
 def settings():
-    Height, Width = 500, 500
+    global settings_bool, menu_bool
+    Height, Width = 700, 500
+    lst_txts = []
+    text_color = 'Blue'
     pos = window.get_size()[0] // 2 - Width // 2, window.get_size()[1] // 2 - Height // 2
-    #pygame.draw.rect(window, "darkGray", (*pos, 500, 500))
+    rect = pygame.draw.rect(window, "yellow", (*pos, Width, Height))
+    font = pygame.font.Font(None, 60)
+    text_y = rect.y + 40
+    text_x = rect.x + 250
+    count_y = rect.height // 5
+
+    title = world.TxT("НАСТРОЙКИ", font, text_color, text_x, text_y)
+    lst_txts.append(title)
+
+    volume = world.TxT("громкость", font, text_color, text_x, text_y + count_y)
+    lst_txts.append(volume)
+
+    window_size = world.TxT("размер окна", font, text_color, text_x, text_y + count_y * 2)
+    lst_txts.append(window_size)
+
+    cancel = world.TxT("отменить", font, text_color, text_x, text_y + count_y * 3)
+    lst_txts.append(cancel)
+
+    save_changes = world.TxT("сохранить", font, text_color, text_x, text_y + count_y * 4)
+    lst_txts.append(save_changes)
+
+    if event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT:
+        klickPos = event.pos
+        if volume[1].collidepoint(klickPos):
+            pass
+        if window_size[1].collidepoint(klickPos):
+            pass
+        if cancel[1].collidepoint(klickPos):
+            settings_bool = False
+            menu_bool = True
+        if save_changes[1].collidepoint(klickPos):
+            settings_bool = False
+            menu_bool = True
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not begining:
+        settings_bool = not settings_bool
+    for i in lst_txts:
+        window.blit(*i)
 
 
 def menu():
-    global menu
+    global menu_bool, settings_bool
     lst_txts = []
-    Height, Width = 250, 250
-    pos = window.get_size()[0] // 2, window.get_size()[1] // 2
-    #pygame.draw.rect(window, "darkGray", (pos[0] - Width // 2, pos[1] - Height // 2, 500, 500))
-    font = pygame.font.Font(None, 70)
-    title = world.TxT("Меню", font, (255, 77, 213), pos[0], 70)
-    lst_txts.append(title)
+    Height, Width = 500, 500
+    pos = window.get_size()[0] // 2 - Width // 2, window.get_size()[1] // 2 - Height // 2
+    rect = pygame.draw.rect(window, "darkGray", (*pos, Width, Height))
     font = pygame.font.Font(None, 60)
-    text_y = pos[1] - Height // 2
-    resume = world.TxT("продолжить игру", font, (255, 77, 213), pos[0], text_y)
+    text_y = rect.y + 40
+    text_x = rect.x + 250
+    count_y = rect.height // 5
+    title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
+    lst_txts.append(title)
+    resume = world.TxT("продолжить", font, (255, 77, 213), text_x, text_y + count_y)
     lst_txts.append(resume)
-    new_game = world.TxT("новая игра", font, (255, 77, 213), pos[0], text_y + 50)
+    new_game = world.TxT("новая игра", font, (255, 77, 213), text_x, text_y + count_y * 2)
     lst_txts.append(new_game)
-    settings_txt = world.TxT("настройки", font, (255, 77, 213), pos[0], text_y + 100)
+    settings_txt = world.TxT("настройки", font, (255, 77, 213), text_x, text_y + count_y * 3)
     lst_txts.append(settings_txt)
-    quit = world.TxT("выйти из игры", font, (255, 77, 213), pos[0], text_y + 150)
+    quit = world.TxT("выйти из игры", font, (255, 77, 213), text_x, text_y + count_y * 4)
     lst_txts.append(quit)
-    if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+    if event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT:
         klickPos = event.pos
         if resume[1].collidepoint(klickPos):
-            menu = False
+            menu_bool = False
         if quit[1].collidepoint(klickPos):
             pygame.quit()
             sys.exit()
         if new_game[1].collidepoint(klickPos):
             pass
         if settings_txt[1].collidepoint(klickPos):
-            settings()
+            settings_bool = True
+            menu_bool = False
+    for i in lst_txts:
+        window.blit(*i)
 
 
 def zastavka():
-    global begining
+    global begining, settings_bool, menu_bool
     intro_text = ["The lat letter", "",
                   "начать игру",
                   "настройки",
@@ -106,53 +144,49 @@ def zastavka():
     font = pygame.font.Font(None, 60)
     start = world.TxT("начать игру", font, (255, 77, 213), 200, 150)
     lst_txts.append(start)
-    settings = world.TxT("настройки", font, (255, 77, 213), 200, 200)
-    lst_txts.append(settings)
+    settings_txt = world.TxT("настройки", font, (255, 77, 213), 200, 200)
+    lst_txts.append(settings_txt)
     quit = world.TxT("выйти из игры", font, (255, 77, 213), 200, 250)
     lst_txts.append(quit)
-    if event.type == pygame.MOUSEBUTTONDOWN and event.button == pygame.BUTTON_LEFT:
+    if event.type == pygame.MOUSEBUTTONUP and event.button == pygame.BUTTON_LEFT:
         klickPos = event.pos
         if start[1].collidepoint(klickPos):
             begining = False
+            settings_bool = False
+            menu_bool = False
         if quit[1].collidepoint(klickPos):
             pygame.quit()
             sys.exit()
-        if settings[1].collidepoint(klickPos):
-            pass
-    # text_center = 200
-    # for line in intro_text[1:]:
-    #    string_rendered = font.render(line, True, pygame.Color(255, 77, 213))
-    #    name_rect = string_rendered.get_rect()
-    #    text_y += 10
-    #    name_rect.top = text_y
-    #    name_rect.centerx = text_center
-    #    text_y += name_rect.height
-    #    window.blit(string_rendered, name_rect)
-    #    if klickPos and
+        if settings_txt[1].collidepoint(klickPos):
+            settings_bool = True
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        settings_bool = False
     for i in lst_txts:
         window.blit(*i)
 
 
 fps = 60
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not begining:
-            menu = True
+            menu_bool = not menu_bool
+    window.fill((0, 0, 0))
+    window.blit(bg, (0, 0))
+    land_sprites.draw(window)
+    mob_sprites.draw(window)
     if begining:
         zastavka()
-    else:
-        window.fill((0, 0, 0))
-        window.blit(bg, (0, 0))
+    elif menu_bool:
+        menu()
+    elif not settings_bool:
         # hero.draw_radius(window)
         land_sprites.update()
         mob_sprites.update()
-        land_sprites.draw(window)
-        mob_sprites.draw(window)
-    if menu_bool:
-        menu()
-    settings()
+    if settings_bool:
+        settings()
     pygame.display.flip()
     clock.tick(fps)

@@ -63,30 +63,51 @@ class Hero(Mob):
     def move(self, keys):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
         is_collide = False
+        lst_platforms = []
         for i in collide_sprites:
             if i.__class__ == Platform:
+                lst_platforms.append(i)
+        # потом убрать
+        for i in lst_platforms:
+            if i.rect.top == self.rect.bottom - 2:
                 is_collide = True
                 self.jump_opportunity = True
+        if is_collide:
+            self.status = 'idle'
         if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jump_opportunity:
-            self.jump_coords = self.rect.y - 100
+            self.jump_coords = self.rect.y - 120
             self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.rect.x -= 2
-            self.direction = False
-            self.status = "run"
+            for i in lst_platforms:
+                if (self.rect.bottom >= i.rect.top >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
+                        and self.rect.x + 2 == i.rect.right:
+                    break
+            else:
+                self.rect.x -= 2
+                self.direction = False
+                self.status = "run"
         elif keys[pygame.K_DOWN] or keys[pygame.K_s]:
             pass
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.rect.x += 2
-            self.direction = True
-            self.status = "run"
+            for i in lst_platforms:
+                if (self.rect.bottom >= i.rect.top >= self.rect.y or self.rect.bottom >= i.rect.bottom >= self.rect.y) \
+                        and self.rect.right - 2 == i.rect.x:
+                    break
+            else:
+                self.rect.x += 2
+                self.direction = True
+                self.status = "run"
         else:
             self.status = "idle"
         if self.jump_coords < self.rect.y:
-            self.rect.y -= 1.5
-            self.status = "jump"
-        if self.jump_coords >= self.rect.y and self.prev_status == "jump" or self.status == "fall" or self.prev_status\
-                == "fall" and not is_collide:
+            for i in lst_platforms:
+                if self.rect.bottom >= i.rect.bottom >= self.rect.y:
+                    break
+            else:
+                self.rect.y -= 1.5
+                self.status = "jump"
+        if (self.jump_coords >= self.rect.y or self.status != "jump" or
+            self.prev_status == "fall") and not is_collide:
             self.jump_opportunity = False
             self.rect.y += 2
             self.jump_coords = self.rect.y
@@ -98,6 +119,9 @@ class Hero(Mob):
         pygame.draw.circle(surface, 'white', self.rect.center, 100, 1)
         self.hero_x = self.rect[0]
         self.hero_y = self.rect[1]
+
+    def can_move(self):
+        pass
 
 
 class Enemies(Mob):

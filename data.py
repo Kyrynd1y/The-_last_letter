@@ -8,10 +8,6 @@ platform_images = []
 mobs_images = []
 zastavkaImg = pygame.image.load('data/zastavka.jpg')
 zastavkaImg = pygame.transform.flip(zastavkaImg, True, False)
-coords_platform = [(0, 825, 0), (180, 825, 0), (360, 825, 0), (540, 825, 0), (720, 825, 0),
-                   (1080, 825, 0), (360, 645, 0), (720, 465, 0),
-                   (1080, 465, 0), (1260, 465, 0), (1440, 465, 0)]
-
 coords_enemies = [(180, 825, 'skeleton')]
 
 coef = 0
@@ -26,7 +22,6 @@ for j in range(len(names)):
             if not os.path.isfile(fullname):
                 coef = 0
                 break
-
             image = pygame.image.load(fullname)
             mobs_images[j][i].append(image)
 while True:
