@@ -7,6 +7,8 @@ import mobs
 import world
 from world import *
 from data import *
+from underground import *
+
 pygame.init()
 
 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
@@ -16,6 +18,9 @@ pygame.mixer.music.set_volume(0)
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
+
+letter = Letters()
+under = Underground()
 
 clock = pygame.time.Clock()
 
@@ -29,9 +34,13 @@ settings_bool = False
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites)
 
-coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
-                   (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0), (x_w * 19, y_w * 19, 0),
-                   (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
+if not under.fight:
+    coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
+                       (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0),
+                       (x_w * 19, y_w * 19, 0),
+                       (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
+if under.fight:
+    coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0)]
 
 coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
 
@@ -45,7 +54,7 @@ for i in coords_platform:
 for i in coords_enemies:
     pos = (i[0], i[1])
     name = i[2]
-    mobs.Enemies(*pos, name, mob_sprites, land_sprites)
+    mob = mobs.Enemies(*pos, name, mob_sprites, land_sprites)
 
 
 def settings():
@@ -167,6 +176,8 @@ def zastavka():
 
 fps = 60
 
+letter.random_letters()
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -175,7 +186,11 @@ while True:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not begining:
             menu_bool = not menu_bool
     window.fill((0, 0, 0))
-    window.blit(bg, (0, 0))
+    if under.fight:
+        window.blit(bg_under, (0, 0))
+        letter.draw_letters(window, x_w * 3, y_w * 3)
+    else:
+        window.blit(bg, (0, 0))
     land_sprites.draw(window)
     mob_sprites.draw(window)
     if begining:
@@ -183,8 +198,10 @@ while True:
     elif menu_bool:
         menu()
     elif not settings_bool:
-        # hero.draw_radius(window)
+        hero.draw_radius(window)
+        mob.draw_radius(window)
         land_sprites.update()
+        under.fight_start(hero, mob)
         mob_sprites.update()
     if settings_bool:
         settings()

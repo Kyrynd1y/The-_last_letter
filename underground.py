@@ -3,14 +3,26 @@ import sys
 import os
 
 from mobs import *
-from world import *
 from data import *
+from world import *
 import random
+
+un_background = pygame.image.load('data/landshaft/space.png')
+bg_under = pygame.Surface((1920, 1080))
+bg_under.blit(un_background, (0, 0))
 
 
 class Underground(pygame.sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
+        self.fight = False
+        self.bgr = pygame.image.load('data/landshaft/space.png')
+
+    def fight_start(self, hero, mob):
+        for event in pygame.event.get():
+            if (hero.hero_x - mob.mob_x) ** 2 + (hero.hero_y - mob.mob_y) ** 2 <= (hero.radius + mob.radius) ** 2 \
+                    and event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+                self.fight = True
 
 
 class Letters(pygame.sprite.Sprite):
@@ -31,8 +43,9 @@ class Letters(pygame.sprite.Sprite):
     def draw_letters(self, screen: pygame.Surface, x, y):
         for elem in self.letters:
             letter = pygame.image.load(f'data/R_Letters/Letter_{elem}.png')
-            pygame.transform.scale(letter, (60, 60))
-            screen.blit(letter, (x, y))
-            x += 60
+            a = pygame.transform.scale(letter, (60, 60))
+            pygame.transform.scale(image, (60, 60))
+            screen.blit(a, (x, y))
+            x += 80
 
 #
