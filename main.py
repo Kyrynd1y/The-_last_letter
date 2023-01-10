@@ -18,6 +18,7 @@ pygame.mixer.music.set_volume(0)
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
+land_sprites_2_vozvrashenie = pygame.sprite.Group()
 
 letter = Letters()
 under = Underground()
@@ -34,13 +35,12 @@ settings_bool = False
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites)
 
-if not under.fight:
-    coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
-                       (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0),
-                       (x_w * 19, y_w * 19, 0),
-                       (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
-if under.fight:
-    coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0)]
+coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
+                   (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0),
+                   (x_w * 19, y_w * 19, 0),
+                   (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
+
+coords_platform_2 = [(x_w * 3, y_w * 15, 0), (x_w * 12, y_w * 15, 0)]
 
 coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
 
@@ -50,6 +50,13 @@ for i in coords_platform:
     image = data.platform_images[image]
     image = pygame.transform.scale(image, (360, 66))
     world.Platform(pos, image, land_sprites)
+
+for i in coords_platform_2:
+    pos = (i[0], i[1])
+    image = i[2]
+    image = data.platform_images[image]
+    image = pygame.transform.scale(image, (360, 66))
+    world.Platform(pos, image, land_sprites_2_vozvrashenie)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
@@ -185,13 +192,17 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not begining:
             menu_bool = not menu_bool
+        if (hero.hero_x - mob.mob_x) ** 2 + (hero.hero_y - mob.mob_y) ** 2 <= (hero.radius + mob.radius) ** 2 \
+                and event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+            under.fight = True
     window.fill((0, 0, 0))
     if under.fight:
         window.blit(bg_under, (0, 0))
         letter.draw_letters(window, x_w * 3, y_w * 3)
+        land_sprites_2_vozvrashenie.draw(window)
     else:
         window.blit(bg, (0, 0))
-    land_sprites.draw(window)
+        land_sprites.draw(window)
     mob_sprites.draw(window)
     if begining:
         zastavka()
@@ -201,7 +212,6 @@ while True:
         hero.draw_radius(window)
         mob.draw_radius(window)
         land_sprites.update()
-        under.fight_start(hero, mob)
         mob_sprites.update()
     if settings_bool:
         settings()
