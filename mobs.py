@@ -4,6 +4,7 @@ import sys
 import pygame
 from data import mobs_images, statuses, names
 from world import Platform
+from underground import *
 
 fps = 60
 
@@ -40,7 +41,7 @@ class Mob(pygame.sprite.Sprite):
 
 
 class Hero(Mob):
-    def __init__(self, x, y, name, mob_sprites, land_sprites):
+    def __init__(self, x, y, name, mob_sprites, land_sprites, is_fight):
         super().__init__(x, y, name, mob_sprites, land_sprites)
         self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
@@ -48,10 +49,12 @@ class Hero(Mob):
         self.hero_x = 0
         self.hero_y = 0
         self.radius = 100
+        self.is_fight = is_fight
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
-        self.move(keys)
+        if not self.is_fight:
+            self.move(keys)
         if self.status != self.prev_status:
             self.ticks = 0
             self.prev_status = self.status
@@ -59,6 +62,7 @@ class Hero(Mob):
             self.update_image()
             self.ticks = 0
         self.ticks += 1
+        print(self.is_fight)
 
     def move(self, keys):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
