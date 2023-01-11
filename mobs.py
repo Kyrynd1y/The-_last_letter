@@ -23,12 +23,13 @@ class Mob(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (100, 100))
         self.rect = self.image.get_rect()
         self.rect.bottomleft = x, y
+        self.is_fight = False
 
     def move(self):
         pass
 
     def attack(self):
-        pass
+        self.is_fight = not self.is_fight
 
     def update_image(self):
         self.coef += 1
@@ -38,6 +39,9 @@ class Mob(pygame.sprite.Sprite):
         if not self.direction:
             image = pygame.transform.flip(image, True, False)
         self.image = pygame.transform.scale(image, (100, 100))
+
+    def correct_pos(self, x_w, y_w):
+        self.rect.bottomleft = x_w, y_w
 
 
 class Hero(Mob):
@@ -62,7 +66,6 @@ class Hero(Mob):
             self.update_image()
             self.ticks = 0
         self.ticks += 1
-        print(self.is_fight)
 
     def move(self, keys):
         collide_sprites = pygame.sprite.spritecollide(self, self.land_sprites, False)
@@ -141,7 +144,8 @@ class Enemies(Mob):
         self.allowance = 0
 
     def update(self) -> None:
-        self.move()
+        if not self.is_fight:
+            self.move()
         if self.status != self.prev_status:
             self.ticks = 0
             self.prev_status = self.status

@@ -44,6 +44,7 @@ coords_platform_2 = [(x_w * 3, y_w * 15, 0), (x_w * 12, y_w * 15, 0)]
 
 coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
 
+
 for i in coords_platform:
     pos = (i[0], i[1])
     image = i[2]
@@ -195,6 +196,10 @@ while True:
         if (hero.hero_x - mob.mob_x) ** 2 + (hero.hero_y - mob.mob_y) ** 2 <= (hero.radius + mob.radius) ** 2 \
                 and event.type == pygame.KEYDOWN and event.key == pygame.K_s:
             under.fight = True
+            hero.attack()
+            mob.attack()
+            mob.correct_pos(x_w * 12, y_w * 15)
+            hero.correct_pos(x_w * 3, y_w * 15)
     window.fill((0, 0, 0))
     if under.fight:
         window.blit(bg_under, (0, 0))
