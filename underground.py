@@ -38,12 +38,13 @@ class Letters(pygame.sprite.Sprite):
             random.shuffle(temp)
             self.letters = temp
 
-    def draw_letters(self, screen: pygame.Surface, x, y):
+    def draw_letters(self, screen: pygame.Surface, x, y, event):
         for elem in self.letters:
             letter = pygame.image.load(f'data/R_Letters/Letter_{elem}.png')
             a = pygame.transform.scale(letter, (60, 60))
             pygame.transform.scale(image, (60, 60))
             screen.blit(a, (x, y))
             x += 80
+
 
 #

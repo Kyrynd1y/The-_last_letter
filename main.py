@@ -183,7 +183,6 @@ def zastavka():
 
 
 fps = 60
-
 letter.random_letters()
 
 while True:
@@ -198,12 +197,12 @@ while True:
             under.fight = True
             hero.attack()
             mob.attack()
-            mob.correct_pos(x_w * 12, y_w * 15)
-            hero.correct_pos(x_w * 3, y_w * 15)
+            mob.correct_pos(x_w * 13.5, y_w * 15)
+            hero.correct_pos(x_w * 4.5, y_w * 15)
     window.fill((0, 0, 0))
     if under.fight:
         window.blit(bg_under, (0, 0))
-        letter.draw_letters(window, x_w * 3, y_w * 3)
+        letter.draw_letters(window, x_w * 3, y_w * 3, event)
         land_sprites_2_vozvrashenie.draw(window)
     else:
         window.blit(bg, (0, 0))

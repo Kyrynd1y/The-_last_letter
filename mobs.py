@@ -124,7 +124,9 @@ class Hero(Mob):
             self.jump_opportunity = True
 
     def draw_radius(self, surface):
-        pygame.draw.circle(surface, 'white', self.rect.center, 100, 1)
+        screen = surface.convert_alpha()
+        screen.fill([0, 0, 0, 0])
+        pygame.draw.circle(screen, (255, 0, 0, 128), self.rect.center, 100)
         self.hero_x = self.rect[0]
         self.hero_y = self.rect[1]
 
@@ -171,6 +173,8 @@ class Enemies(Mob):
             self.status = "run"
 
     def draw_radius(self, surface):
-        pygame.draw.circle(surface, 'red', self.rect.center, 100, 1)
+        screen = surface.convert_alpha()
+        screen.fill([0, 0, 0, 0])
+        pygame.draw.circle(screen, (255, 0, 0, 128), self.rect.center, 100)
         self.mob_x = self.rect[0]
         self.mob_y = self.rect[1]
