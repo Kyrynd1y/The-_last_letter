@@ -3,12 +3,37 @@ import world
 import sys
 import pygame_gui
 from data import zastavkaImg
+import mobs
+from underground import Underground
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
+under = Underground()
+
+x_w, y_w = window.get_size()
+x_w = x_w / 20
+y_w = y_w / 20
+
+coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
+
+bg = world.bg
+
+mob_sprites = pygame.sprite.Group()
+land_sprites = pygame.sprite.Group()
 
 begining = True
 menu_bool = False
 settings_bool = False
+
+enemies = []
+
+hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, under.fight)
+
+for i in coords_enemies:
+    pos = (i[0], i[1])
+    name = i[2]
+    mob = mobs.Enemies(*pos, name, mob_sprites, land_sprites)
+    enemies.append(mob)
 
 
 def settings():
@@ -84,7 +109,7 @@ def menu():
             pygame.quit()
             sys.exit()
         if new_game[1].collidepoint(klickPos):
-            pass
+            new_game_func()
         if settings_txt[1].collidepoint(klickPos):
             settings_bool = True
             menu_bool = False
@@ -126,3 +151,12 @@ def zastavka():
         settings_bool = False
     for i in lst_txts:
         window.blit(*i)
+
+
+def new_game_func():
+    for i in range(len(enemies)):
+        enemies[i].rect.bottomleft = coords_enemies[i][0], coords_enemies[i][1] + 2
+    under.fight = False
+    hero.is_fight = False
+    mob.is_fight = False
+    hero.rect.bottomleft = x_w * 0, y_w * 19
