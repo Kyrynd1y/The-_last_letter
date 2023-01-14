@@ -28,9 +28,6 @@ class Mob(pygame.sprite.Sprite):
     def move(self):
         pass
 
-    def attack(self):
-        self.is_fight = not self.is_fight
-
     def update_image(self):
         self.coef += 1
         if self.coef > len(mobs_images[names.index(self.name)][statuses.index(self.status)]) - 1:
@@ -50,9 +47,8 @@ class Hero(Mob):
         self.land_sprites = land_sprites
         self.jump_coords = self.rect.y
         self.jump_opportunity = True
-        self.hero_x = 0
-        self.hero_y = 0
         self.radius = 100
+        self.hp = 3
         self.is_fight = is_fight
 
     def update(self) -> None:
@@ -140,8 +136,6 @@ class Enemies(Mob):
         self.land_sprites = land_sprites
         self.direction = False
         self.rect.bottomleft = x, y + 2
-        self.mob_x = 0
-        self.mob_y = 0
         self.radius = 100
         self.allowance = 0
 

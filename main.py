@@ -65,11 +65,11 @@ while True:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE and not additional.begining:
             additional.menu_bool = not additional.menu_bool
         for mob in enemies:
-            if (hero.hero_x - mob.mob_x) ** 2 + (hero.hero_y - mob.mob_y) ** 2 <= (hero.radius + mob.radius) ** 2 \
+            if (hero.rect.x - mob.rect.x) ** 2 + (hero.rect.y - mob.rect.y) ** 2 <= (hero.radius + mob.radius) ** 2 \
                     and event.type == pygame.KEYDOWN and event.key == pygame.K_s:
                 under.fight = True
-                hero.attack()
-                mob.attack()
+                hero.is_fight = True
+                mob.is_fight = False
                 mob.correct_pos(x_w * 13.5, y_w * 15)
                 hero.correct_pos(x_w * 4.5, y_w * 15)
     window.fill((0, 0, 0))
