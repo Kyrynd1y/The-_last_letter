@@ -45,3 +45,6 @@ class Letter(pygame.sprite.Group):
         self.letter = letter
         self.image = image
         self.rect = image.get_rect()
+
+
+#
