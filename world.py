@@ -1,6 +1,4 @@
-import pygame
-
-from mobs import *
+from data import *
 
 background = pygame.image.load('data/landshaft/BG1.png')
 background = pygame.transform.scale(background, (1920, 1080))
@@ -26,6 +24,20 @@ class Platform(pygame.sprite.Sprite):
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+
+class Button(pygame.sprite.Sprite):
+    def __init__(self, center_x, center_y, text, button_sprites):
+        super().__init__(button_sprites)
+        self.status = 'idle'
+        self.text = text
+        if button_statuses.index(self.status) != 0:
+            print(button_statuses.index(self.status))
+        self.image = button_images[buttons.index(text)][button_statuses.index(self.status)]
+        self.rect = self.image.get_rect()
+        self.rect.center = center_x, center_y
+
+    def update(self) -> None:
+        self.image = button_images[buttons.index(self.text)][button_statuses.index(self.status)]
 
 
 def TxT(text, font, color, x, y):

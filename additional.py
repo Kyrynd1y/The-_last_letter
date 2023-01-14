@@ -20,6 +20,7 @@ bg = world.bg
 
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
+button_sprites = pygame.sprite.Group()
 
 begining = True
 menu_bool = False
@@ -28,6 +29,11 @@ settings_bool = False
 enemies = []
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, under.fight)
+
+play_butt = world.Button(200, 150, 'play', button_sprites)
+settings_butt = world.Button(200, 240, 'settings', button_sprites)
+exit_butt = world.Button(200, 330, 'exit', button_sprites)
+#new_game_butt = world.Button(200, 430, 'newgame', button_sprites)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
@@ -92,31 +98,55 @@ def menu():
     count_y = rect.height // 5
     title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
     lst_txts.append(title)
-    resume = world.TxT("продолжить", font, (255, 77, 213), text_x, text_y + count_y)
-    lst_txts.append(resume)
+
+    play_butt.rect.center = text_x, text_y + count_y
+    play_butt.status = 'idle'
+    settings_butt.rect.center = text_x, text_y + count_y * 3
+    exit_butt.rect.center = text_x, text_y + count_y * 4
+
     new_game = world.TxT("новая игра", font, (255, 77, 213), text_x, text_y + count_y * 2)
     lst_txts.append(new_game)
-    settings_txt = world.TxT("настройки", font, (255, 77, 213), text_x, text_y + count_y * 3)
-    lst_txts.append(settings_txt)
-    quit = world.TxT("выйти из игры", font, (255, 77, 213), text_x, text_y + count_y * 4)
-    lst_txts.append(quit)
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
-        if resume[1].collidepoint(klickPos):
-            print(resume[1])
+        if play_butt.rect.collidepoint(klickPos):
+            play_butt.status = 'pressed'
             menu_bool = False
-        if quit[1].collidepoint(klickPos):
+        if exit_butt.rect.collidepoint(klickPos):
+            exit_butt.status = 'pressed'
             pygame.quit()
             sys.exit()
         if new_game[1].collidepoint(klickPos):
             new_game_func()
-        if settings_txt[1].collidepoint(klickPos):
+        if settings_butt.rect.collidepoint(klickPos):
+            settings_butt.status = 'pressed'
             settings_bool = True
             menu_bool = False
+    else:
+        aimPos = pygame.mouse.get_pos()
+        if play_butt.rect.collidepoint(aimPos):
+            play_butt.status = 'aim'
+        else:
+            play_butt.status = 'idle'
+        if exit_butt.rect.collidepoint(aimPos):
+            exit_butt.status = 'aim'
+        else:
+            exit_butt.status = 'idle'
+        if settings_butt.rect.collidepoint(aimPos):
+            settings_butt.status = 'aim'
+        else:
+            settings_butt.status = 'idle'
+
     for i in lst_txts:
         window.blit(*i)
 
+def settinks():
+    manager = pygame_gui.UIManager((800, 600))
 
+    window = pygame_gui.elements.UIWindow(pygame.Rect(100, 100, 300, 300), manager=manager)
+
+    hello_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)),
+                                                text='Say Hello',
+                                                manager=manager, container=window)
 def zastavka():
     global begining, settings_bool, menu_bool
     intro_text = ["The lat letter", "",
@@ -129,24 +159,34 @@ def zastavka():
     font = pygame.font.Font(None, 70)
     title = world.TxT("The lat letter", font, (255, 77, 213), 200, 70)
     lst_txts.append(title)
-    font = pygame.font.Font(None, 60)
-    start = world.TxT("начать игру", font, (255, 77, 213), 200, 150)
-    lst_txts.append(start)
-    settings_txt = world.TxT("настройки", font, (255, 77, 213), 200, 200)
-    lst_txts.append(settings_txt)
-    quit = world.TxT("выйти из игры", font, (255, 77, 213), 200, 250)
-    lst_txts.append(quit)
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
-        if start[1].collidepoint(klickPos):
+        if play_butt.rect.collidepoint(klickPos):
+            play_butt.status = 'pressed'
             begining = False
             settings_bool = False
             menu_bool = False
-        if quit[1].collidepoint(klickPos):
+        if exit_butt.rect.collidepoint(klickPos):
+            exit_butt.status = 'pressed'
             pygame.quit()
             sys.exit()
-        if settings_txt[1].collidepoint(klickPos):
+        if settings_butt.rect.collidepoint(klickPos):
+            settings_butt.status = 'pressed'
             settings_bool = True
+    else:
+        aimPos = pygame.mouse.get_pos()
+        if play_butt.rect.collidepoint(aimPos):
+            play_butt.status = 'aim'
+        else:
+            play_butt.status = 'idle'
+        if exit_butt.rect.collidepoint(aimPos):
+            exit_butt.status = 'aim'
+        else:
+            exit_butt.status = 'idle'
+        if settings_butt.rect.collidepoint(aimPos):
+            settings_butt.status = 'aim'
+        else:
+            settings_butt.status = 'idle'
     if pygame.key == pygame.K_ESCAPE:
         settings_bool = False
     for i in lst_txts:

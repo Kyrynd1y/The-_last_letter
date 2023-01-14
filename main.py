@@ -73,6 +73,9 @@ while True:
                 mob.correct_pos(x_w * 13.5, y_w * 15)
                 hero.correct_pos(x_w * 4.5, y_w * 15)
     window.fill((0, 0, 0))
+    land_sprites.update()
+    mob_sprites.update()
+    additional.button_sprites.update()
     if under.fight:
         window.blit(bg_under, (0, 0))
         while letter.letters:
@@ -91,14 +94,14 @@ while True:
     mob_sprites.draw(window)
     if additional.begining:
         additional.zastavka()
+        additional.button_sprites.draw(window)
     elif additional.menu_bool:
         additional.menu()
+        additional.button_sprites.draw(window)
     elif not additional.settings_bool:
         hero.draw_radius(window)
         for mob in enemies:
             mob.draw_radius(window)
-        land_sprites.update()
-        mob_sprites.update()
     if additional.settings_bool:
         additional.settings()
     pygame.display.flip()
