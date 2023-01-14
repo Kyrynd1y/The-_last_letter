@@ -207,8 +207,10 @@ while True:
         window.blit(bg_under, (0, 0))
         while letter.letters:
             for a in letter.letters:
-                ltr = Letter(a, f'data/R_Letters/Letter_{a}', letter_group)
-                ltr.rect.center(x_w * cfg, y_w * cfg)
+                temp = pygame.image.load(f'data/R_Letters/Letter_{a}.png')
+                temp2 = pygame.transform.scale(temp, (60, 60))
+                ltr = Letter(a, temp2, letter_group)
+                ltr.rect.topleft = x_w * cfg, y_w
                 cfg += 1
                 letter.letters.remove(a)
         letter_group.draw(window)
