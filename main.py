@@ -210,9 +210,8 @@ while True:
                 temp = pygame.image.load(f'data/R_Letters/Letter_{a}.png')
                 temp2 = pygame.transform.scale(temp, (60, 60))
                 ltr = Letter(a, temp2, letter_group)
-                ltr.rect[0] += 60
-                ltr.rect[1] += 60
-                print(ltr.rect)
+                ltr.rect.topleft = x_w * cfg, y_w
+                cfg += 1
                 letter.letters.remove(a)
         letter_group.draw(window)
         land_sprites_2_vozvrashenie.draw(window)
