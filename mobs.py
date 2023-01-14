@@ -162,13 +162,14 @@ class Enemies(Mob):
         for i in collide_sprites:
             if i.__class__ == Platform:
                 lst_platforms.append(i)
-
-        if len(lst_platforms) == 1 and collide_sprites[0].rect.x == self.rect.x:
-            self.direction = not self.direction
         if self.direction:
+            if not any(i.rect.collidepoint(self.rect.bottomright) for i in lst_platforms):
+                self.direction = not self.direction
             self.rect.x += 1
             self.status = "run"
         else:
+            if not any(i.rect.collidepoint(self.rect.bottomleft) for i in lst_platforms):
+                self.direction = not self.direction
             self.rect.x -= 1
             self.status = "run"
 
