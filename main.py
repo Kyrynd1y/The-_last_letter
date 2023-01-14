@@ -207,9 +207,12 @@ while True:
         window.blit(bg_under, (0, 0))
         while letter.letters:
             for a in letter.letters:
-                ltr = Letter(a, f'data/R_Letters/Letter_{a}', letter_group)
-                ltr.rect.center(x_w * cfg, y_w * cfg)
-                cfg += 1
+                temp = pygame.image.load(f'data/R_Letters/Letter_{a}.png')
+                temp2 = pygame.transform.scale(temp, (60, 60))
+                ltr = Letter(a, temp2, letter_group)
+                ltr.rect[0] += 60
+                ltr.rect[1] += 60
+                print(ltr.rect)
                 letter.letters.remove(a)
         letter_group.draw(window)
         land_sprites_2_vozvrashenie.draw(window)

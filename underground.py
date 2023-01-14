@@ -39,12 +39,11 @@ class Letters(pygame.sprite.Sprite):
             self.letters = temp
 
 
-class Letter(pygame.sprite.Group):
+class Letter(pygame.sprite.Sprite):
     def __init__(self, letter, image, letter_group):
-        super().__init__(letter, image, letter_group)
+        super().__init__(letter_group)
         self.letter = letter
         self.image = image
         self.rect = image.get_rect()
-
 
 #
