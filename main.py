@@ -19,6 +19,7 @@ window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 land_sprites_2_vozvrashenie = pygame.sprite.Group()
+letter_group = pygame.sprite.Group()
 
 letter = Letters()
 under = Underground()
@@ -185,6 +186,8 @@ def zastavka():
 fps = 60
 letter.random_letters()
 
+cfg = 3
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -202,7 +205,13 @@ while True:
     window.fill((0, 0, 0))
     if under.fight:
         window.blit(bg_under, (0, 0))
-        letter.draw_letters(window, x_w * 3, y_w * 3, event)
+        while letter.letters:
+            for a in letter.letters:
+                ltr = Letter(a, f'data/R_Letters/Letter_{a}', letter_group)
+                ltr.rect.center(x_w * cfg, y_w * cfg)
+                cfg += 1
+                letter.letters.remove(a)
+        letter_group.draw(window)
         land_sprites_2_vozvrashenie.draw(window)
     else:
         window.blit(bg, (0, 0))
