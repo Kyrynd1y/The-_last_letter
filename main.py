@@ -8,11 +8,9 @@ import additional
 
 window = additional.window
 
-pygame.init()
-
 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(0)
+pygame.mixer.music.set_volume(additional.settings.value_volume / 100 / 2)
 
 land_sprites = additional.land_sprites
 mob_sprites = additional.mob_sprites
@@ -72,9 +70,12 @@ while True:
                 mob.is_fight = False
                 mob.correct_pos(x_w * 13.5, y_w * 15)
                 hero.correct_pos(x_w * 4.5, y_w * 15)
+        if additional.settings_bool:
+            additional.manager.process_events(event)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                additional.settings_bool = False
+            additional.settings_bool = additional.settings.update(event, additional.settings_bool)
     window.fill((0, 0, 0))
-    land_sprites.update()
-    mob_sprites.update()
     additional.button_sprites.update()
     if under.fight:
         window.blit(bg_under, (0, 0))
@@ -99,10 +100,13 @@ while True:
         additional.menu()
         additional.button_sprites.draw(window)
     elif not additional.settings_bool:
+        land_sprites.update()
+        mob_sprites.update()
         hero.draw_radius(window)
         for mob in enemies:
             mob.draw_radius(window)
     if additional.settings_bool:
-        additional.settings()
+        additional.settings.draw()
+        additional.manager.update(fps / 1000.0)
     pygame.display.flip()
     clock.tick(fps)

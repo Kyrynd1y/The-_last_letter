@@ -6,7 +6,13 @@ from data import zastavkaImg
 import mobs
 from underground import Underground
 
+pygame.init()
+
+pygame.display.set_caption('Quick Start')
+
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
+manager = pygame_gui.UIManager(window.get_size())
 
 under = Underground()
 
@@ -21,6 +27,7 @@ bg = world.bg
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 button_sprites = pygame.sprite.Group()
+invisible_sprites = pygame.sprite.Group()
 
 begining = True
 menu_bool = False
@@ -33,7 +40,7 @@ hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, und
 play_butt = world.Button(200, 150, 'play', button_sprites)
 settings_butt = world.Button(200, 240, 'settings', button_sprites)
 exit_butt = world.Button(200, 330, 'exit', button_sprites)
-#new_game_butt = world.Button(200, 430, 'newgame', button_sprites)
+# new_game_butt = world.Button(200, 430, 'newgame', button_sprites)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
@@ -42,48 +49,69 @@ for i in coords_enemies:
     enemies.append(mob)
 
 
-def settings():
-    global settings_bool, menu_bool
-    Height, Width = 700, 500
-    lst_txts = []
-    text_color = 'Blue'
-    pos = window.get_size()[0] // 2 - Width // 2, window.get_size()[1] // 2 - Height // 2
-    rect = pygame.draw.rect(window, "yellow", (*pos, Width, Height))
-    font = pygame.font.Font(None, 60)
-    text_y = rect.y + 40
-    text_x = rect.x + 250
-    count_y = rect.height // 5
+class Settings:
+    def __init__(self, manager):
+        self.manager = manager
+        self.x, self.y = window.get_size()[0] // 2 - 200, window.get_size()[1] // 2 - 200
+        self.window_sett = pygame_gui.elements.UIWindow(
+            pygame.Rect(self.x, self.y, 400, 400),
+            manager=self.manager)
 
-    title = world.TxT("НАСТРОЙКИ", font, text_color, text_x, text_y)
-    lst_txts.append(title)
+        self.lst_window_size = ['на весь экран', 'оконный режим']
+        self.lst_window_ratio = ['4:3', '16:9', '16:10']
 
-    volume = world.TxT("громкость", font, text_color, text_x, text_y + count_y)
-    lst_txts.append(volume)
+        self.volume_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 20), (100, 50)),
+                                                        text='громкость',
+                                                        manager=self.manager, container=self.window_sett)
+        self.volume_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((10, 70), (350, 20)),
+                                                                    start_value=50,
+                                                                    value_range=(0, 100),
+                                                                    manager=self.manager, container=self.window_sett)
+        self.value_volume = self.volume_slider.get_current_value()
+        self.volume_value_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((280, 20), (100, 50)),
+                                                              text=str(self.value_volume) + '%',
+                                                              manager=self.manager, container=self.window_sett)
 
-    window_size = world.TxT("размер окна", font, text_color, text_x, text_y + count_y * 2)
-    lst_txts.append(window_size)
+        self.resolution_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 130), (140, 50)),
+                                                            text='режим отображения',
+                                                            manager=self.manager, container=self.window_sett)
+        self.resolution = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((170, 140), (150, 30)),
+                                                             options_list=self.lst_window_size,
+                                                             starting_option='на весь экран',
+                                                             manager=self.manager, container=self.window_sett)
+        self.value_resolution = self.volume_slider.get_current_value()
 
-    cancel = world.TxT("отменить", font, text_color, text_x, text_y + count_y * 3)
-    lst_txts.append(cancel)
+        self.ratio_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 170), (150, 50)),
+                                                       text='соотношение сторон',
+                                                       manager=self.manager, container=self.window_sett)
+        self.ratio = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((170, 180), (150, 30)),
+                                                        options_list=self.lst_window_ratio, starting_option='16:9',
+                                                        manager=self.manager, container=self.window_sett)
+        self.value_ratio = self.volume_slider.get_current_value()
 
-    save_changes = world.TxT("сохранить", font, text_color, text_x, text_y + count_y * 4)
-    lst_txts.append(save_changes)
-    if pygame.mouse.get_pressed()[0]:
-        klickPos = pygame.mouse.get_pos()
-        if volume[1].collidepoint(klickPos):
-            pass
-        if window_size[1].collidepoint(klickPos):
-            pass
-        if cancel[1].collidepoint(klickPos):
-            settings_bool = False
-            menu_bool = True
-        if save_changes[1].collidepoint(klickPos):
-            settings_bool = False
-            menu_bool = True
-    if pygame.key == pygame.K_ESCAPE and not begining:
-        settings_bool = not settings_bool
-    for i in lst_txts:
-        window.blit(*i)
+        self.ok_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((50, 280), (100, 40)), text='применить',
+                                                      manager=self.manager, container=self.window_sett)
+
+        self.cancel_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, 280), (100, 40)),
+                                                          text='отменить',
+                                                          manager=self.manager, container=self.window_sett)
+
+    def update(self, event, settings_bool):
+        if event.type == pygame_gui.UI_BUTTON_PRESSED:
+            if event.ui_element == self.cancel_button:
+                settings_bool = False
+            elif event.ui_element == self.ok_button:
+                pygame.mixer.music.set_volume(self.value_volume / 100 / 2)
+                settings_bool = False
+        return settings_bool
+
+    def draw(self):
+        self.value_volume = self.volume_slider.get_current_value()
+        self.volume_value_label.set_text(str(self.value_volume) + '%')
+        manager.draw_ui(window)
+
+
+settings = Settings(manager)
 
 
 def menu():
@@ -120,6 +148,7 @@ def menu():
         if settings_butt.rect.collidepoint(klickPos):
             settings_butt.status = 'pressed'
             settings_bool = True
+            settings.window_sett.set_position((settings.x, settings.y))
             menu_bool = False
     else:
         aimPos = pygame.mouse.get_pos()
@@ -139,26 +168,13 @@ def menu():
     for i in lst_txts:
         window.blit(*i)
 
-def settinks():
-    manager = pygame_gui.UIManager((800, 600))
 
-    window = pygame_gui.elements.UIWindow(pygame.Rect(100, 100, 300, 300), manager=manager)
-
-    hello_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((350, 275), (100, 50)),
-                                                text='Say Hello',
-                                                manager=manager, container=window)
 def zastavka():
     global begining, settings_bool, menu_bool
-    intro_text = ["The lat letter", "",
-                  "начать игру",
-                  "настройки",
-                  "выйти из игры"]
-    lst_txts = []
     fon = pygame.transform.scale(zastavkaImg, window.get_size())
     window.blit(fon, (0, 0))
     font = pygame.font.Font(None, 70)
-    title = world.TxT("The lat letter", font, (255, 77, 213), 200, 70)
-    lst_txts.append(title)
+    title = world.TxT("The last letter", font, (255, 77, 213), 200, 70)
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(klickPos):
@@ -173,6 +189,7 @@ def zastavka():
         if settings_butt.rect.collidepoint(klickPos):
             settings_butt.status = 'pressed'
             settings_bool = True
+            settings.window_sett.set_position((settings.x, settings.y))
     else:
         aimPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(aimPos):
@@ -189,8 +206,7 @@ def zastavka():
             settings_butt.status = 'idle'
     if pygame.key == pygame.K_ESCAPE:
         settings_bool = False
-    for i in lst_txts:
-        window.blit(*i)
+    window.blit(*title)
 
 
 def new_game_func():
