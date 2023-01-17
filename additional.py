@@ -35,6 +35,7 @@ begining = True
 menu_bool = False
 settings_bool = False
 
+
 enemies = []
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, under.fight)

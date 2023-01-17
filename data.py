@@ -10,6 +10,7 @@ platform_images = []
 mobs_images = []
 button_images = []
 
+
 zastavkaImg = pygame.image.load('data/zastavka.jpg')
 zastavkaImg = pygame.transform.flip(zastavkaImg, True, False)
 coords_enemies = [(180, 825, 'skeleton')]
