@@ -17,15 +17,6 @@ letter_group = pygame.sprite.Group()
 alphabet = ["а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
             "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"]
 
-ltrs = []
-
-for l in alphabet:
-    temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png')
-    eval(f'{l} = Letter({l}, {temp}, {letter_group})')
-    ltrs.append(l)
-
-print(ltrs)
-
 
 class Underground(pygame.sprite.Sprite):
     def __init__(self, *groups):

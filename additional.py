@@ -43,6 +43,7 @@ play_butt = world.Button(200, 150, 'play', button_sprites)
 settings_butt = world.Button(200, 240, 'settings', button_sprites)
 exit_butt = world.Button(200, 330, 'exit', button_sprites)
 new_game_butt = world.Button(0, 0, 'newgame', button_sprites)
+titles_butt = world.Button(200, 420, 'titles', button_sprites)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
