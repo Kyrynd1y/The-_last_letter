@@ -1,12 +1,14 @@
 import pygame
 
 import data
+import test
 import world
 import sys
 import pygame_gui
 from data import zastavkaImg
 import mobs
 from underground import Underground
+from test import titles
 
 pygame.init()
 
@@ -34,7 +36,6 @@ invisible_sprites = pygame.sprite.Group()
 begining = True
 menu_bool = False
 settings_bool = False
-
 
 enemies = []
 
@@ -138,7 +139,6 @@ class Settings:
         manager.draw_ui(window)
 
 
-
 settings = Settings(manager)
 
 
@@ -161,6 +161,7 @@ def menu():
     exit_butt.rect.center = text_x, text_y + count_y * 4
     new_game_butt.rect.center = text_x, text_y + count_y * 2
     new_game_butt.add(button_sprites)
+    titles_butt.kill()
 
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
@@ -175,6 +176,8 @@ def menu():
             settings_bool = True
             settings.window_sett.set_position((settings.x, settings.y))
             menu_bool = False
+        if titles_butt.rect.collidepoint(klickPos):
+            test.titles()
 
     for i in lst_txts:
         window.blit(*i)
@@ -191,7 +194,6 @@ def zastavka():
     exit_butt.rect.center = 200, 330
     new_game_butt.kill()
 
-
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(klickPos):
@@ -207,6 +209,8 @@ def zastavka():
             settings_butt.status = 'pressed'
             settings_bool = True
             settings.window_sett.set_position((settings.x, settings.y))
+        if titles_butt.rect.collidepoint(klickPos):
+            test.titles()
     else:
         aimPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(aimPos):

@@ -10,6 +10,7 @@ import additional
 
 window = additional.window
 
+
 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(additional.settings.value_volume / 100 / 2)
@@ -35,7 +36,7 @@ coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w
                    (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
 
 coords_platform_2 = [(x_w * 3, y_w * 15, 0), (x_w * 12, y_w * 15, 0)]
-ъ
+
 for i in coords_platform:
     pos = (i[0], i[1])
     image = i[2]
