@@ -12,6 +12,20 @@ un_background = pygame.image.load('data/landshaft/space.png')
 bg_under = pygame.Surface((1920, 1080))
 bg_under.blit(un_background, (0, 0))
 
+letter_group = pygame.sprite.Group()
+
+alphabet = ["а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
+            "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"]
+
+ltrs = []
+
+for l in alphabet:
+    temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png')
+    eval(f'{l} = Letter({l}, {temp}, {letter_group})')
+    ltrs.append(l)
+
+print(ltrs)
+
 
 class Underground(pygame.sprite.Sprite):
     def __init__(self, *groups):
@@ -45,5 +59,11 @@ class Letter(pygame.sprite.Sprite):
         self.letter = letter
         self.image = image
         self.rect = image.get_rect()
+        self.coef = 5
 
-#
+    def move(self, x, y):
+        if pygame.mouse.get_pressed()[0]:
+            klickPos = pygame.mouse.get_pos()
+            if self.rect.collidepoint(klickPos):
+                self.rect.topleft = x * self.coef, y * self.coef
+                self.coef += 3
