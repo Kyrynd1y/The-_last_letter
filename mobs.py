@@ -14,7 +14,6 @@ class Mob(pygame.sprite.Sprite):
         super().__init__(mob_sprites, land_sprites)
         self.ticks = 0
         self.status = "idle"
-        self.hp = 100
         self.coef = 0
         self.name = name
         self.direction = True
@@ -24,6 +23,7 @@ class Mob(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.bottomleft = x, y
         self.is_fight = False
+        self.bottomleft = self.rect.bottomleft
 
     def move(self):
         pass
@@ -55,6 +55,7 @@ class Hero(Mob):
         keys = pygame.key.get_pressed()
         if not self.is_fight:
             self.move(keys)
+            self.bottomleft = self.rect.bottomleft
         if self.status != self.prev_status:
             self.ticks = 0
             self.prev_status = self.status
@@ -138,6 +139,7 @@ class Enemies(Mob):
         self.rect.bottomleft = x, y + 2
         self.radius = 100
         self.allowance = 0
+        self.live = True
 
     def update(self) -> None:
         if not self.is_fight:

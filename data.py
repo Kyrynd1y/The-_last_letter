@@ -4,7 +4,7 @@ import pygame
 
 statuses = ["run", "die", "fall", "hurt", "idle", "jump", "stand"]
 names = ['adventurer', 'skeleton']
-buttons = ['settings', 'play', 'exit', 'newgame']
+buttons = ['settings', 'play', 'exit', 'newgame', 'titles']
 button_statuses = ['idle', 'aim', 'pressed']
 platform_images = []
 mobs_images = []
