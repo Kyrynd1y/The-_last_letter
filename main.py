@@ -4,12 +4,15 @@ import pygame as pygame
 
 import data
 import mobs
+import underground
 from world import *
 from underground import *
 import additional
 
 window = additional.window
 
+selectef_word = ''
+fight_mob = None
 
 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
@@ -25,10 +28,11 @@ under = additional.under
 
 letter = Letters()
 
-
 clock = pygame.time.Clock()
 
 x_w, y_w = additional.x_w, additional.y_w
+
+play_selected = world.Button(x_w * 9 + 50, y_w * 12, 'play', underground.letter_group)
 
 coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
                    (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0),
@@ -54,8 +58,6 @@ for i in coords_platform_2:
 fps = 60
 letter.random_letters()
 
-cfg = 3
-
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -66,11 +68,16 @@ while True:
         for mob in enemies:
             if (hero.rect.x - mob.rect.x) ** 2 + (hero.rect.y - mob.rect.y) ** 2 <= (hero.radius + mob.radius) ** 2 \
                     and event.type == pygame.KEYDOWN and event.key == pygame.K_s:
+                fight_mob = mob
                 under.fight = True
                 hero.is_fight = True
                 mob.is_fight = False
                 mob.correct_pos(x_w * 13.5, y_w * 15)
+                mob.direction = True
                 hero.correct_pos(x_w * 4.5, y_w * 15)
+                hero.status = 'idle'
+                break
+
         if additional.settings_bool:
             additional.manager.process_events(event)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -78,16 +85,39 @@ while True:
             additional.settings_bool = additional.settings.update(event, additional.settings_bool)
     window.fill((0, 0, 0))
     additional.button_sprites.update()
+
     if under.fight:
         window.blit(bg_under, (0, 0))
-        for a in letter.letters:
-            temp = pygame.image.load(f'data/R_Letters/Letter_{a}.png')
-            temp2 = pygame.transform.scale(temp, (60, 60))
-            ltr = Letter(a, temp2, letter_group)
-            ltr.rect.topleft = x_w * cfg, y_w
-            cfg += 1
-            ltr.move(x_w, y_w)
-        cfg = 3
+        if not ltrs:
+            underground.creating_letters(letter.letters, x_w, y_w)
+        coef_selected_pos = 5
+        if pygame.mouse.get_pressed()[0]:
+            press_coord = pygame.mouse.get_pos()
+            if play_selected.rect.collidepoint(press_coord):
+                for i in letter.start_word:
+                    for ltr in ltrs:
+                        if ltr.letter == i and ltr.selected:
+                            selectef_word += ltr.letter
+                            break
+                with open('russian.txt') as f:
+                    lines = [line.rstrip('\n') for line in f]
+                    print(selectef_word)
+                    print(lines[1])
+                    for word in lines:
+                        if selectef_word == ''.join(word):
+                            fight_mob.live = False
+                            fight_mob.kill()
+                            hero.is_fight = False
+                            hero.rect.bottomleft = hero.bottomleft
+                            under.fight = False
+                            print(under.fight)
+            for ltr in ltrs:
+                if ltr.selected:
+                    coef_selected_pos += 1
+            for ltr in ltrs:
+                if ltr.rect.collidepoint(press_coord):
+                    ltr.move(x_w * coef_selected_pos, y_w * 6)
+        play_selected.update()
         letter_group.draw(window)
         land_sprites_2_vozvrashenie.draw(window)
     else:
