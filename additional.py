@@ -40,6 +40,7 @@ hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, und
 play_butt = world.Button(200, 150, 'play', button_sprites)
 settings_butt = world.Button(200, 240, 'settings', button_sprites)
 exit_butt = world.Button(200, 330, 'exit', button_sprites)
+titles_butt = world.Button(200, 420, 'titles', button_sprites)
 # new_game_butt = world.Button(200, 430, 'newgame', button_sprites)
 
 for i in coords_enemies:
