@@ -14,10 +14,11 @@ bgr = pygame.image.load('data/landshaft/space.png')
 def titles():
     pygame.mixer.music.stop()
     pygame.mixer.music.load("titri_slowed.mp3")
-    pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(1)
     pygame.mixer.music.set_volume(0.05)
 
-    credit_list = ["THE_LAST_LETTER", " ", " "]
+    credit_list = ["THE_LAST_LETTER", " ", "1", "2", '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
+                   '15', '16', '17', '18', '19']
 
     texts = []
 
@@ -33,7 +34,7 @@ def titles():
                 pygame.mixer.music.stop()
                 pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
                 pygame.mixer.music.play(-1)
-                pygame.mixer.music.set_volume(0.05)
+                pygame.mixer.music.set_volume(0.03)
                 return
 
         screen.fill((255, 255, 255))
