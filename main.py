@@ -36,8 +36,7 @@ play_selected = world.Button(x_w * 9 + 50, y_w * 12, 'play', underground.letter_
 
 coords_platform = [(x_w * 0, y_w * 19, 0), (x_w * 3, y_w * 19, 0), (x_w * 6, y_w * 19, 0), (x_w * 9, y_w * 19, 0),
                    (x_w * 12, y_w * 19, 0), (x_w * 15, y_w * 19, 0), (x_w * 18, y_w * 19, 0),
-                   (x_w * 19, y_w * 19, 0),
-                   (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0)]
+                   (x_w * 14, y_w * 5, 0), (x_w * 3, y_w * 15, 0), (x_w * 9, y_w * 11, 0)]
 
 coords_platform_2 = [(x_w * 3, y_w * 15, 0), (x_w * 12, y_w * 15, 0)]
 
