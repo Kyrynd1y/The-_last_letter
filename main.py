@@ -110,7 +110,12 @@ while True:
                             hero.is_fight = False
                             hero.rect.bottomleft = hero.bottomleft
                             under.fight = False
-                            print(under.fight)
+                        else:
+                            hero.is_fight = False
+                            hero.rect.bottomleft = hero.bottomleft
+                            hero.hp -= 1
+                            mob.rect.bottomleft = mob.bottomleft
+                            under.fight = False
             for ltr in ltrs:
                 if ltr.selected:
                     coef_selected_pos += 1
@@ -136,6 +141,10 @@ while True:
         hero.draw_radius(window)
         for mob in enemies:
             mob.draw_radius(window)
+        for i in range(hero.hp):
+            window.blit(hp_full, (x_w * (i + 1) + 10, y_w))
+        for i in range(hero.hp - 3):
+            window.blit(hp_empty, int(x_w * (hero.hp + i)), int(y_w))
     if additional.settings_bool:
         additional.settings.draw()
         additional.manager.update(fps / 1000.0)

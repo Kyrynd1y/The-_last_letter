@@ -144,6 +144,7 @@ class Enemies(Mob):
     def update(self) -> None:
         if not self.is_fight:
             self.move()
+            self.bottomleft = self.rect.bottomleft
         if self.status != self.prev_status:
             self.ticks = 0
             self.prev_status = self.status
