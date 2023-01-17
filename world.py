@@ -25,6 +25,7 @@ class Platform(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
+
 class Button(pygame.sprite.Sprite):
     def __init__(self, center_x, center_y, text, button_sprites):
         super().__init__(button_sprites)
@@ -37,6 +38,13 @@ class Button(pygame.sprite.Sprite):
         self.rect.center = center_x, center_y
 
     def update(self) -> None:
+        if self.rect.collidepoint(pygame.mouse.get_pos()):
+            if not pygame.mouse.get_pressed()[0]:
+                self.status = 'aim'
+            else:
+                self.status = 'pressed'
+        else:
+            self.status = 'idle'
         self.image = button_images[buttons.index(self.text)][button_statuses.index(self.status)]
 
 

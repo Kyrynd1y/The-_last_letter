@@ -1,4 +1,6 @@
 import pygame
+
+import data
 import world
 import sys
 import pygame_gui
@@ -40,7 +42,7 @@ hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, und
 play_butt = world.Button(200, 150, 'play', button_sprites)
 settings_butt = world.Button(200, 240, 'settings', button_sprites)
 exit_butt = world.Button(200, 330, 'exit', button_sprites)
-# new_game_butt = world.Button(200, 430, 'newgame', button_sprites)
+new_game_butt = world.Button(0, 0, 'newgame', button_sprites)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
@@ -87,7 +89,7 @@ class Settings:
         self.ratio = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((170, 180), (150, 30)),
                                                         options_list=self.lst_window_ratio, starting_option='16:9',
                                                         manager=self.manager, container=self.window_sett)
-        self.value_ratio = self.volume_slider.get_current_value()
+        self.value_ratio = self.ratio
 
         self.ok_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((50, 280), (100, 40)), text='применить',
                                                       manager=self.manager, container=self.window_sett)
@@ -97,11 +99,34 @@ class Settings:
                                                           manager=self.manager, container=self.window_sett)
 
     def update(self, event, settings_bool):
+        global window
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == self.cancel_button:
                 settings_bool = False
             elif event.ui_element == self.ok_button:
                 pygame.mixer.music.set_volume(self.value_volume / 100 / 2)
+                settings_bool = False
+        if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+            if event.ui_element == self.ratio:
+                size = event.text
+                if size == '4:3':
+                    for i in range(len(data.lst_window_sized_3_4)):
+                        if data.lst_window_sized_3_4[i] >= window.get_size():
+                            if i == 0:
+                                i = 1
+                            size = data.lst_window_sized_3_4[i - 1]
+                            window = pygame.display.set_mode(size, pygame.RESIZABLE)
+                            break
+                elif size == '16:9':
+                    for i in range(len(data.lst_window_sized_16_9)):
+                        if data.lst_window_sized_3_4[i] >= window.get_size():
+                            if i == 0:
+                                i = 1
+                            size = data.lst_window_sized_3_4[i - 1]
+                            window = pygame.display.set_mode(size, pygame.RESIZABLE)
+                            break
+        if event.type == pygame_gui.UI_WINDOW_CLOSE:
+            if event.ui_element == window:
                 settings_bool = False
         return settings_bool
 
@@ -109,6 +134,7 @@ class Settings:
         self.value_volume = self.volume_slider.get_current_value()
         self.volume_value_label.set_text(str(self.value_volume) + '%')
         manager.draw_ui(window)
+
 
 
 settings = Settings(manager)
@@ -131,39 +157,22 @@ def menu():
     play_butt.status = 'idle'
     settings_butt.rect.center = text_x, text_y + count_y * 3
     exit_butt.rect.center = text_x, text_y + count_y * 4
+    new_game_butt.rect.center = text_x, text_y + count_y * 2
+    new_game_butt.add(button_sprites)
 
-    new_game = world.TxT("новая игра", font, (255, 77, 213), text_x, text_y + count_y * 2)
-    lst_txts.append(new_game)
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(klickPos):
-            play_butt.status = 'pressed'
             menu_bool = False
         if exit_butt.rect.collidepoint(klickPos):
-            exit_butt.status = 'pressed'
             pygame.quit()
             sys.exit()
-        if new_game[1].collidepoint(klickPos):
+        if new_game_butt.rect.collidepoint(klickPos):
             new_game_func()
         if settings_butt.rect.collidepoint(klickPos):
-            settings_butt.status = 'pressed'
             settings_bool = True
             settings.window_sett.set_position((settings.x, settings.y))
             menu_bool = False
-    else:
-        aimPos = pygame.mouse.get_pos()
-        if play_butt.rect.collidepoint(aimPos):
-            play_butt.status = 'aim'
-        else:
-            play_butt.status = 'idle'
-        if exit_butt.rect.collidepoint(aimPos):
-            exit_butt.status = 'aim'
-        else:
-            exit_butt.status = 'idle'
-        if settings_butt.rect.collidepoint(aimPos):
-            settings_butt.status = 'aim'
-        else:
-            settings_butt.status = 'idle'
 
     for i in lst_txts:
         window.blit(*i)
@@ -175,6 +184,12 @@ def zastavka():
     window.blit(fon, (0, 0))
     font = pygame.font.Font(None, 70)
     title = world.TxT("The last letter", font, (255, 77, 213), 200, 70)
+    play_butt.rect.center = 200, 150
+    settings_butt.rect.center = 200, 240
+    exit_butt.rect.center = 200, 330
+    new_game_butt.kill()
+
+
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
         if play_butt.rect.collidepoint(klickPos):
@@ -212,6 +227,8 @@ def zastavka():
 def new_game_func():
     for i in range(len(enemies)):
         enemies[i].rect.bottomleft = coords_enemies[i][0], coords_enemies[i][1] + 2
+        enemies[i].live = True
+        enemies[i].add(mob_sprites, land_sprites)
     under.fight = False
     hero.is_fight = False
     mob.is_fight = False

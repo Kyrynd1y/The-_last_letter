@@ -9,9 +9,14 @@ button_statuses = ['idle', 'aim', 'pressed']
 platform_images = []
 mobs_images = []
 button_images = []
+
 zastavkaImg = pygame.image.load('data/zastavka.jpg')
 zastavkaImg = pygame.transform.flip(zastavkaImg, True, False)
 coords_enemies = [(180, 825, 'skeleton')]
+
+lst_window_sized_3_4 = [(320, 240), (640, 480), (1024, 768), (1152, 864), (1400, 1050), (1440, 1080), (2048, 1536)]
+lst_window_sized_16_9 = [(640, 360), (1280, 720), (1920, 1080), (2048, 1152)]
+lst_window_sized_16_10 = [(1440, 900), (1680, 1050), (1920, 1200), (2048, 1080)]
 
 coef = 0
 for j in range(len(names)):
