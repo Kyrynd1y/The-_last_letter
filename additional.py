@@ -29,7 +29,6 @@ bg = world.bg
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 button_sprites = pygame.sprite.Group()
-invisible_sprites = pygame.sprite.Group()
 
 begining = True
 menu_bool = False
@@ -147,13 +146,15 @@ def menu():
     lst_txts = []
     Height, Width = 500, 500
     pos = window.get_size()[0] // 2 - Width // 2, window.get_size()[1] // 2 - Height // 2
-    rect = pygame.draw.rect(window, "darkGray", (*pos, Width, Height))
+    rect = pygame.draw.rect(window, "darkGreen", (*pos, Width, Height))
     font = pygame.font.Font(None, 60)
     text_y = rect.y + 40
     text_x = rect.x + 250
     count_y = rect.height // 5
-    title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
-    lst_txts.append(title)
+    window.blit(data.menu_fon, pos)
+    window.blit(data.menu_title, (text_x - 150, text_y - 80))
+    #title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
+    #lst_txts.append(title)
 
     play_butt.rect.center = text_x, text_y + count_y
     play_butt.status = 'idle'
@@ -161,6 +162,9 @@ def menu():
     exit_butt.rect.center = text_x, text_y + count_y * 4
     new_game_butt.rect.center = text_x, text_y + count_y * 2
     new_game_butt.add(button_sprites)
+    play_butt.add(button_sprites)
+    settings_butt.add((button_sprites))
+    titles_butt.kill()
 
     if pygame.mouse.get_pressed()[0]:
         klickPos = pygame.mouse.get_pos()
@@ -176,8 +180,8 @@ def menu():
             settings.window_sett.set_position((settings.x, settings.y))
             menu_bool = False
 
-    for i in lst_txts:
-        window.blit(*i)
+    #for i in lst_txts:
+    #    window.blit(*i)
 
 
 def zastavka():
