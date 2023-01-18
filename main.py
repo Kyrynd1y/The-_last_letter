@@ -55,7 +55,6 @@ for i in coords_platform_2:
     world.Platform(pos, image, land_sprites_2_vozvrashenie)
 
 fps = 60
-letter.random_letters()
 
 while True:
     for event in pygame.event.get():
@@ -70,11 +69,12 @@ while True:
                 fight_mob = mob
                 under.fight = True
                 hero.is_fight = True
-                mob.is_fight = False
+                mob.is_fight = True
                 mob.correct_pos(x_w * 13.5, y_w * 15)
-                mob.direction = True
+                mob.direction = False
                 hero.correct_pos(x_w * 4.5, y_w * 15)
                 hero.status = 'idle'
+                hero.direction = True
                 break
 
         if additional.settings_bool:
@@ -87,7 +87,8 @@ while True:
 
     if under.fight:
         window.blit(bg_under, (0, 0))
-        if not ltrs:
+        if not underground.ltrs:
+            letter.random_letters()
             underground.creating_letters(letter.letters, x_w, y_w)
         coef_selected_pos = 5
         if pygame.mouse.get_pressed()[0]:
@@ -100,21 +101,20 @@ while True:
                             break
                 with open('russian.txt') as f:
                     lines = [line.rstrip('\n') for line in f]
-                    print(selectef_word)
-                    print(lines[1])
                     for word in lines:
+                        hero.is_fight = False
+                        hero.rect.bottomleft = hero.bottomleft
+                        under.fight = False
+                        fight_mob.rect.bottomleft = fight_mob.bottomleft
+                        fight_mob.is_fight = False
+                        selectef_word = ''
+                        ltrs = []
                         if selectef_word == ''.join(word):
                             fight_mob.live = False
                             fight_mob.kill()
-                            hero.is_fight = False
-                            hero.rect.bottomleft = hero.bottomleft
-                            under.fight = False
                         else:
-                            hero.is_fight = False
-                            hero.rect.bottomleft = hero.bottomleft
                             hero.hp -= 1
-                            mob.rect.bottomleft = mob.bottomleft
-                            under.fight = False
+                        break
             for ltr in ltrs:
                 if ltr.selected:
                     coef_selected_pos += 1
@@ -140,12 +140,43 @@ while True:
         hero.draw_radius(window)
         for mob in enemies:
             mob.draw_radius(window)
-        for i in range(hero.hp):
-            window.blit(hp_full, (x_w * (i + 1) + 10, y_w))
-        for i in range(hero.hp - 3):
-            window.blit(hp_empty, int(x_w * (hero.hp + i)), int(y_w))
     if additional.settings_bool:
         additional.settings.draw()
         additional.manager.update(fps / 1000.0)
+    if not additional.begining:
+        for i in range(hero.hp):
+            window.blit(hp_full, (x_w * i + 20, y_w))
+        for i in range(3 - hero.hp):
+            window.blit(hp_empty, (x_w * (hero.hp + i) + 20, y_w))
+    if hero.hp == 0 or len(mob_sprites) == 1:
+        if hero.hp == 0:
+            death_img = pygame.transform.scale(death_img, window.get_size())
+            window.blit(death_img, (0, 0))
+        else:
+            win_fon = pygame.transform.scale(win_fon, window.get_size())
+            winner = pygame.transform.scale(winner, (400, 300))
+            window.blit(win_fon, (0, 0))
+            window.blit(winner, (x_w * 1, y_w * 1))
+        additional.new_game_butt.add(additional.button_sprites)
+        additional.new_game_butt.rect.center = (x_w * 7, y_w * 17)
+
+        additional.exit_butt.rect.center = (x_w * 13, y_w * 17)
+
+        if pygame.mouse.get_pressed()[0]:
+            klickPos = pygame.mouse.get_pos()
+            if additional.exit_butt.rect.collidepoint(klickPos):
+                pygame.quit()
+                sys.exit()
+            if additional.new_game_butt.rect.collidepoint(klickPos):
+                hero.hp = 3
+                additional.new_game_func()
+
+        additional.play_butt.kill()
+        additional.titles_butt.kill()
+        additional.settings_butt.kill()
+
+        additional.button_sprites.draw(window)
+    if len(mob_sprites) == 1:
+        pass
     pygame.display.flip()
     clock.tick(fps)

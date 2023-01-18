@@ -70,8 +70,9 @@ class Letter(pygame.sprite.Sprite):
 
 
 def creating_letters(word, x_w, y_w):
-    coef_start_pos = 3
+    coef_start_pos = 4
     for l in word:
+        print(word)
         temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png')
         temp = pygame.transform.scale(temp, (60, 60))
         ltr = Letter(l, temp, letter_group)
@@ -80,3 +81,4 @@ def creating_letters(word, x_w, y_w):
         ltr.add(letter_group)
         coef_start_pos += 1
         ltrs.append(ltr)
+    print(ltrs)
