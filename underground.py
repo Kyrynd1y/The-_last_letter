@@ -38,7 +38,7 @@ class Letters(pygame.sprite.Sprite):
         self.start_word = []
 
     def random_letters(self):
-        with open('russian.txt') as f:
+        with open('singular_and_plural.txt', encoding='utf8') as f:
             lines = [line.rstrip('\n') for line in f]
             a = random.choice(lines)
             temp = []
@@ -59,20 +59,21 @@ class Letter(pygame.sprite.Sprite):
         self.topleft = self.rect.topleft
         self.selected = False
         self.coef = 5
+        self.numb_selected = None
 
-    def move(self, x, y):
+    def move(self, x, y, but_selected):
         if self.selected:
             self.rect.topleft = self.topleft
             self.selected = False
         else:
             self.rect.topleft = x, y
             self.selected = True
+            self.numb_selected = but_selected
 
 
 def creating_letters(word, x_w, y_w):
     coef_start_pos = 4
     for l in word:
-        print(word)
         temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png')
         temp = pygame.transform.scale(temp, (60, 60))
         ltr = Letter(l, temp, letter_group)
@@ -81,4 +82,3 @@ def creating_letters(word, x_w, y_w):
         ltr.add(letter_group)
         coef_start_pos += 1
         ltrs.append(ltr)
-    print(ltrs)

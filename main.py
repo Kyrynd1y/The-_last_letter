@@ -94,33 +94,32 @@ while True:
         if pygame.mouse.get_pressed()[0]:
             press_coord = pygame.mouse.get_pos()
             if play_selected.rect.collidepoint(press_coord):
-                for i in letter.start_word:
-                    for ltr in ltrs:
-                        if ltr.letter == i and ltr.selected:
-                            selectef_word += ltr.letter
-                            break
-                with open('russian.txt') as f:
+                for ltr in underground.ltrs:
+                    if ltr.selected:
+                        selectef_word += ltr.letter
+                hero.is_fight = False
+                hero.rect.bottomleft = hero.bottomleft
+                under.fight = False
+                fight_mob.rect.bottomleft = fight_mob.bottomleft
+                fight_mob.is_fight = False
+                for i in underground.ltrs:
+                    i.kill()
+                underground.ltrs = []
+                with open('singular_and_plural.txt', encoding='utf8') as f:
                     lines = [line.rstrip('\n') for line in f]
                     for word in lines:
-                        hero.is_fight = False
-                        hero.rect.bottomleft = hero.bottomleft
-                        under.fight = False
-                        fight_mob.rect.bottomleft = fight_mob.bottomleft
-                        fight_mob.is_fight = False
-                        selectef_word = ''
-                        ltrs = []
                         if selectef_word == ''.join(word):
+                            selectef_word = ''
                             fight_mob.live = False
                             fight_mob.kill()
-                        else:
-                            hero.hp -= 1
-                        break
-            for ltr in ltrs:
+                    else:
+                        hero.hp -= 1
+            for ltr in underground.ltrs:
                 if ltr.selected:
                     coef_selected_pos += 1
-            for ltr in ltrs:
+            for ltr in underground.ltrs:
                 if ltr.rect.collidepoint(press_coord):
-                    ltr.move(x_w * coef_selected_pos, y_w * 6)
+                    ltr.move(x_w * coef_selected_pos, y_w * 6, coef_selected_pos)
         play_selected.update()
         letter_group.draw(window)
         land_sprites_2_vozvrashenie.draw(window)
@@ -168,7 +167,6 @@ while True:
                 pygame.quit()
                 sys.exit()
             if additional.new_game_butt.rect.collidepoint(klickPos):
-                hero.hp = 3
                 additional.new_game_func()
 
         additional.play_butt.kill()

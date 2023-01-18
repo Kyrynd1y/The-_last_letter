@@ -151,10 +151,10 @@ def menu():
     text_y = rect.y + 40
     text_x = rect.x + 250
     count_y = rect.height // 5
-    window.blit(data.menu_fon, pos)
-    window.blit(data.menu_title, (text_x - 150, text_y - 80))
-    #title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
-    #lst_txts.append(title)
+#    window.blit(data.menu_fon, pos)
+#    window.blit(data.menu_title, (text_x - 150, text_y - 80))
+    title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
+    lst_txts.append(title)
 
     play_butt.rect.center = text_x, text_y + count_y
     play_butt.status = 'idle'
@@ -242,3 +242,5 @@ def new_game_func():
     hero.is_fight = False
     mob.is_fight = False
     hero.rect.bottomleft = x_w * 0, y_w * 19
+    hero.hp = 3
+

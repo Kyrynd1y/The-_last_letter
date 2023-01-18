@@ -13,15 +13,15 @@ button_images = []
 
 zastavkaImg = pygame.image.load('data/zastavka.jpg')
 zastavkaImg = pygame.transform.flip(zastavkaImg, True, False)
-death_img = pygame.image.load('data/death_2.jpg')
+death_img = pygame.image.load('data/death_2.png')
 win_fon = pygame.image.load('data/win_fon.jpg')
 winner = pygame.image.load('data/winner.png')
 coords_enemies = [(180, 825, 'skeleton')]
 
 hp_full = pygame.transform.scale(pygame.image.load('data/hp_full.png'), (52, 50))
 hp_empty = pygame.transform.scale(pygame.image.load('data/hp_empty.png'), (52, 50))
-menu_title = pygame.transform.scale(pygame.image.load('data/MenuButtons/menu.png'), (300, 100))
-menu_fon = pygame.transform.scale(pygame.image.load('data/MenuButtons/menu_fon.png'), (500, 500))
+#menu_title = pygame.transform.scale(pygame.image.load('data/MenuButtons/menu.png'), (300, 100))
+#menu_fon = pygame.transform.scale(pygame.image.load('data/MenuButtons/menu_fon.png'), (500, 500))
 
 
 lst_window_sized_3_4 = [(320, 240), (640, 480), (1024, 768), (1152, 864), (1400, 1050), (1440, 1080), (2048, 1536)]
