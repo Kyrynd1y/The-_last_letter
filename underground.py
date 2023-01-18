@@ -15,11 +15,7 @@ bg_under.blit(un_background, (0, 0))
 
 letter_group = pygame.sprite.Group()
 
-# alphabet = ["а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о",
-#            "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я"]
-
 ltrs = []
-
 
 
 class Underground(pygame.sprite.Sprite):
@@ -60,7 +56,7 @@ class Letter(pygame.sprite.Sprite):
         self.topleft = self.rect.topleft
         self.selected = False
         self.coef = 5
-        self.numb_selected = None
+        self.numb_selected = 100
 
     def move(self, x, y, but_selected):
         if self.selected:
@@ -70,6 +66,9 @@ class Letter(pygame.sprite.Sprite):
             self.rect.topleft = x, y
             self.selected = True
             self.numb_selected = but_selected
+
+    def __lt__(self, other):
+        return self.numb_selected < other.numb_selected
 
 
 def creating_letters(word, x_w, y_w):

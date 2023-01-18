@@ -76,7 +76,7 @@ while True:
                 hero.correct_pos(x_w * 4.5, y_w * 15)
                 hero.status = 'idle'
                 hero.direction = True
-                mob.add(fight_mobs_sprites)
+                fight_mob.add(fight_mobs_sprites)
                 hero.add(fight_mobs_sprites)
                 break
 
@@ -97,14 +97,19 @@ while True:
         if pygame.mouse.get_pressed()[0]:
             press_coord = pygame.mouse.get_pos()
             if play_selected.rect.collidepoint(press_coord):
+                underground.ltrs.sort()
+
                 for ltr in underground.ltrs:
                     if ltr.selected:
                         selectef_word += ltr.letter
+
                 hero.is_fight = False
                 hero.rect.bottomleft = hero.bottomleft
+                hero.remove(fight_mobs_sprites)
                 under.fight = False
                 fight_mob.rect.bottomleft = fight_mob.bottomleft
                 fight_mob.is_fight = False
+                fight_mob.remove(fight_mobs_sprites)
                 for i in underground.ltrs:
                     i.kill()
                 underground.ltrs = []
@@ -115,6 +120,7 @@ while True:
                             selectef_word = ''
                             fight_mob.live = False
                             fight_mob.kill()
+                            break
                     else:
                         hero.hp -= 1
             for ltr in underground.ltrs:
@@ -125,11 +131,12 @@ while True:
                     ltr.move(x_w * coef_selected_pos, y_w * 6, coef_selected_pos)
         play_selected.update()
         letter_group.draw(window)
+        fight_mobs_sprites.draw(window)
         land_sprites_2_vozvrashenie.draw(window)
     else:
         window.blit(bg, (0, 0))
         land_sprites.draw(window)
-    mob_sprites.draw(window)
+        mob_sprites.draw(window)
     if additional.begining:
         additional.zastavka()
         additional.button_sprites.draw(window)

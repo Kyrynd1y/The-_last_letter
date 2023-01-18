@@ -24,7 +24,7 @@ x_w, y_w = window.get_size()
 x_w = x_w / 20
 y_w = y_w / 20
 
-coords_enemies = [(x_w * 5, y_w * 19, 'skeleton')]
+coords_enemies = [(x_w * 5, y_w * 19, 'skeleton'), (x_w * 3, y_w * 15, 'skeleton')]
 
 bg = world.bg
 
