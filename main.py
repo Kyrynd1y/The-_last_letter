@@ -20,6 +20,7 @@ pygame.mixer.music.set_volume(additional.settings.value_volume / 100 / 2)
 
 land_sprites = additional.land_sprites
 mob_sprites = additional.mob_sprites
+fight_mobs_sprites = pygame.sprite.Group()
 land_sprites_2_vozvrashenie = pygame.sprite.Group()
 
 hero = additional.hero
@@ -75,6 +76,8 @@ while True:
                 hero.correct_pos(x_w * 4.5, y_w * 15)
                 hero.status = 'idle'
                 hero.direction = True
+                mob.add(fight_mobs_sprites)
+                hero.add(fight_mobs_sprites)
                 break
 
         if additional.settings_bool:

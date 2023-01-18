@@ -78,7 +78,7 @@ class Hero(Mob):
         if is_collide:
             self.status = 'idle'
         if (keys[pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_SPACE]) and self.jump_opportunity:
-            self.jump_coords = self.rect.y - 200
+            self.jump_coords = self.rect.y - 250
             self.jump_opportunity = False
         elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             for i in lst_platforms:

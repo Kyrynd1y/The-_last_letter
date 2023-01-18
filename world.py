@@ -26,7 +26,6 @@ class Platform(pygame.sprite.Sprite):
         self.rect.topleft = pos
 
 
-
 class Button(pygame.sprite.Sprite):
     def __init__(self, center_x, center_y, text, button_sprites):
         super().__init__(button_sprites)

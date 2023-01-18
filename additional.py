@@ -32,6 +32,7 @@ mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 button_sprites = pygame.sprite.Group()
 
+
 begining = True
 menu_bool = False
 settings_bool = False
