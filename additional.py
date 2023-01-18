@@ -15,6 +15,8 @@ pygame.init()
 pygame.display.set_caption('Quick Start')
 
 window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+screen_size = window.get_size()
+print(screen_size)
 
 manager = pygame_gui.UIManager(window.get_size())
 
@@ -24,14 +26,13 @@ x_w, y_w = window.get_size()
 x_w = x_w / 20
 y_w = y_w / 20
 
-coords_enemies = [(x_w * 5, y_w * 19, 'skeleton'), (x_w * 3, y_w * 15, 'skeleton')]
+coords_enemies = [(x_w * 5, y_w * 19, 'skeleton'), (x_w * 3, y_w * 15, 'skeleton'), (x_w * 14, y_w * 7, 'skeleton')]
 
 bg = world.bg
 
 mob_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 button_sprites = pygame.sprite.Group()
-
 
 begining = True
 menu_bool = False
@@ -62,8 +63,7 @@ class Settings:
             pygame.Rect(self.x, self.y, 400, 400),
             manager=self.manager)
 
-        self.lst_window_size = ['на весь экран', 'оконный режим']
-        self.lst_window_ratio = ['4:3', '16:9', '16:10']
+        self.lst_window_size = ['на весь экран', '4:3', '16:9', '16:10']
 
         self.volume_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 20), (100, 50)),
                                                         text='громкость',
@@ -86,13 +86,7 @@ class Settings:
                                                              manager=self.manager, container=self.window_sett)
         self.value_resolution = self.volume_slider.get_current_value()
 
-        self.ratio_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 170), (150, 50)),
-                                                       text='соотношение сторон',
-                                                       manager=self.manager, container=self.window_sett)
-        self.ratio = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((170, 180), (150, 30)),
-                                                        options_list=self.lst_window_ratio, starting_option='16:9',
-                                                        manager=self.manager, container=self.window_sett)
-        self.value_ratio = self.ratio
+        self.value_ratio = self.resolution
 
         self.ok_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((50, 280), (100, 40)), text='применить',
                                                       manager=self.manager, container=self.window_sett)
@@ -100,6 +94,7 @@ class Settings:
         self.cancel_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, 280), (100, 40)),
                                                           text='отменить',
                                                           manager=self.manager, container=self.window_sett)
+        self.comit_screen_size = screen_size
 
     def update(self, event, settings_bool):
         global window
@@ -108,26 +103,38 @@ class Settings:
                 settings_bool = False
             elif event.ui_element == self.ok_button:
                 pygame.mixer.music.set_volume(self.value_volume / 100 / 2)
+                window = pygame.display.set_mode(self.comit_screen_size, pygame.RESIZABLE)
                 settings_bool = False
         if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-            if event.ui_element == self.ratio:
+            if event.ui_element == self.resolution:
                 size = event.text
                 if size == '4:3':
                     for i in range(len(data.lst_window_sized_3_4)):
-                        if data.lst_window_sized_3_4[i] >= window.get_size():
+                        if data.lst_window_sized_3_4[i] > screen_size:
                             if i == 0:
                                 i = 1
                             size = data.lst_window_sized_3_4[i - 1]
-                            window = pygame.display.set_mode(size, pygame.RESIZABLE)
+                            self.comit_screen_size = size
                             break
                 elif size == '16:9':
                     for i in range(len(data.lst_window_sized_16_9)):
-                        if data.lst_window_sized_3_4[i] >= window.get_size():
+                        print(data.lst_window_sized_16_9[i], screen_size)
+                        if data.lst_window_sized_16_9[i] > screen_size:
                             if i == 0:
                                 i = 1
-                            size = data.lst_window_sized_3_4[i - 1]
-                            window = pygame.display.set_mode(size, pygame.RESIZABLE)
+                            size = data.lst_window_sized_16_9[i - 1]
+                            self.comit_screen_size = size
                             break
+                elif size == '16:10':
+                    for i in range(len(data.lst_window_sized_16_10)):
+                        if data.lst_window_sized_16_10[i] > screen_size:
+                            if i == 0:
+                                i = 1
+                            size = data.lst_window_sized_16_10[i - 1]
+                            self.comit_screen_size = size
+                            break
+                elif size == 'на весь экран':
+                    self.comit_screen_size = screen_size
         if event.type == pygame_gui.UI_WINDOW_CLOSE:
             if event.ui_element == window:
                 settings_bool = False
@@ -152,8 +159,8 @@ def menu():
     text_y = rect.y + 40
     text_x = rect.x + 250
     count_y = rect.height // 5
-#    window.blit(data.menu_fon, pos)
-#    window.blit(data.menu_title, (text_x - 150, text_y - 80))
+    #    window.blit(data.menu_fon, pos)
+    #    window.blit(data.menu_title, (text_x - 150, text_y - 80))
     title = world.TxT("МЕНЮ", font, (255, 77, 213), text_x, text_y)
     lst_txts.append(title)
 
@@ -183,8 +190,8 @@ def menu():
         if titles_butt.rect.collidepoint(klickPos):
             test.titles()
 
-    #for i in lst_txts:
-    #    window.blit(*i)
+    for i in lst_txts:
+        window.blit(*i)
 
 
 def zastavka():
@@ -244,4 +251,3 @@ def new_game_func():
     mob.is_fight = False
     hero.rect.bottomleft = x_w * 0, y_w * 19
     hero.hp = 3
-
