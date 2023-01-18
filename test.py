@@ -15,10 +15,12 @@ def titles():
     pygame.mixer.music.stop()
     pygame.mixer.music.load("titri_slowed.mp3")
     pygame.mixer.music.play(1)
-    pygame.mixer.music.set_volume(0.05)
+    pygame.mixer.music.set_volume(0.02)
 
-    credit_list = ["THE_LAST_LETTER", " ", "1", "2", '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14',
-                   '15', '16', '17', '18', '19']
+    credit_list = ["THE_LAST_LETTER", " ", "Программисты:", " ",
+                   'Kyrynd1y_Flames', " ", 'Фомичев Кирилл', '', 'Ибатуллин Денис', '', 'Geranton_Storm',
+                   '', 'Режиссеры:', '', 'Ибатуллин Денис', '', 'Фомичев Кирилл',
+                   '', 'Аферистен:', '', 'DeathGun']
 
     texts = []
 
