@@ -50,6 +50,7 @@ class Hero(Mob):
         self.radius = 100
         self.hp = 3
         self.is_fight = is_fight
+        self.gravity_speed = 1
 
     def update(self) -> None:
         keys = pygame.key.get_pressed()
@@ -72,7 +73,7 @@ class Hero(Mob):
             if i.__class__ == Platform:
                 lst_platforms.append(i)
         for i in lst_platforms:
-            if i.rect.top == self.rect.bottom - 2:
+            if i.rect.top + 10 >= self.rect.bottom:
                 is_collide = True
                 self.jump_opportunity = True
         if is_collide:
@@ -109,16 +110,19 @@ class Hero(Mob):
                 if self.rect.center[1] >= i.rect.bottom >= self.rect.y:
                     break
             else:
-                self.rect.y -= 1.5
+                self.rect.y -= 3
                 self.status = "jump"
         if (self.jump_coords >= self.rect.y or self.status != "jump" or
             self.prev_status == "fall") and not is_collide:
             self.jump_opportunity = False
-            self.rect.y += 2
+            self.gravity_speed += 1
+            self.rect.y += 2 * self.gravity_speed // 20
             self.jump_coords = self.rect.y
             self.status = "fall"
         elif self.prev_status != 'jump':
             self.jump_opportunity = True
+        if self.status != 'fall':
+            self.gravity_speed = 0
 
     def draw_radius(self, surface):
         screen = surface.convert_alpha()
