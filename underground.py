@@ -35,7 +35,7 @@ class Letters(pygame.sprite.Sprite):
         self.start_word = []
 
     def random_letters(self):
-        with open('singular_and_plural.txt', encoding='utf8') as f:
+        with open('data/singular_and_plural.txt', encoding='utf8') as f:
             lines = [line.rstrip('\n') for line in f]
             a = random.choice(lines)
             temp = []

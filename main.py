@@ -14,7 +14,7 @@ window = additional.window
 selectef_word = ''
 fight_mob = None
 
-pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
+pygame.mixer.music.load("data/music/C418_-_Haggstrom_30921643.mp3")
 pygame.mixer.music.play(-1)
 pygame.mixer.music.set_volume(additional.settings.value_volume / 100 / 2)
 
@@ -113,7 +113,7 @@ while True:
                 for i in underground.ltrs:
                     i.kill()
                 underground.ltrs = []
-                with open('singular_and_plural.txt', encoding='utf8') as f:
+                with open('data/singular_and_plural.txt', encoding='utf8') as f:
                     lines = [line.rstrip('\n') for line in f]
                     for word in lines:
                         if selectef_word == ''.join(word):

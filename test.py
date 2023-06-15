@@ -13,14 +13,14 @@ bgr = pygame.image.load('data/landshaft/space.png')
 
 def titles():
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("titri_slowed.mp3")
+    pygame.mixer.music.load("data/music/piano.mp3")
     pygame.mixer.music.play(1)
-    pygame.mixer.music.set_volume(0.02)
+    # pygame.mixer.music.set_volume(0.02)
 
-    credit_list = ["THE_LAST_LETTER", " ", "Программисты:", " ",
-                   'Kyrynd1y_Flames', " ", 'Фомичев Кирилл', '', 'Ибатуллин Денис', '', 'Geranton_Storm',
-                   '', 'Режиссеры:', '', 'Ибатуллин Денис', '', 'Фомичев Кирилл',
-                   '', 'Аферистен:', '', 'DeathGun']
+    credit_list = ["THE_LAST_LETTER", " ", '', "Программисты:", " ",
+                   'Kyrynd1y', " ", 'Ибатуллин Денис', '', 'Geranton_Storm', '', '', 'Музыка:', '',
+                   'Даниээль Роозенфельд', '', '', 'Графика и дизайн:', '', 'Kyrynd1y',
+                   '', '', 'Режиссеры:', '', 'Ибатуллин Денис', '', 'Другова Светлана Андреевна']
 
     texts = []
 
@@ -34,7 +34,7 @@ def titles():
         for e in pygame.event.get():
             if e.type == QUIT or e.type == KEYDOWN and e.key == pygame.K_ESCAPE:
                 pygame.mixer.music.stop()
-                pygame.mixer.music.load("C418_-_Haggstrom_30921643.mp3")
+                pygame.mixer.music.load("data/music/C418_-_Haggstrom_30921643.mp3")
                 pygame.mixer.music.play(-1)
                 pygame.mixer.music.set_volume(0.03)
                 return
