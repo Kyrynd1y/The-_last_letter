@@ -1,25 +1,30 @@
 import pygame
 from pygame.locals import *
 
+import additional
+import data
+
 pygame.init()
 pygame.display.set_caption('End credits')
-screen = pygame.display.set_mode((1920, 1080))
+screen = pygame.display.set_mode(data.window.get_size())
 screen_r = screen.get_rect()
 font = pygame.font.SysFont("Arial", 40)
 clock = pygame.time.Clock()
 
-bgr = pygame.image.load('data/landshaft/space.png')
+bgr = pygame.image.load('data/landshaft/space.png').convert_alpha()
 
 
 def titles():
     pygame.mixer.music.stop()
-    pygame.mixer.music.load("data/music/piano.mp3")
+    pygame.mixer.music.load("data/music/C418_-_Haggstrom_30921643.mp3")
+    pygame.mixer.music.set_volume(additional.settings.value_volume / 100 / 2)
     pygame.mixer.music.play(1)
     # pygame.mixer.music.set_volume(0.02)
 
     credit_list = ["THE_LAST_LETTER", " ", '', "Программисты:", " ",
                    'Kyrynd1y', " ", 'Ибатуллин Денис', '', 'Geranton_Storm', '', '', 'Музыка:', '',
-                   'Даниээль Роозенфельд', '', '', 'Графика и дизайн:', '', 'Kyrynd1y',
+                   'Даниээль Роозенфельд', '', '', 'Графика и дизайн:', '', 'Kyrynd1y', '', '', 'Бетта тестеры:', '',
+                   'Валерий Центнер',
                    '', '', 'Режиссеры:', '', 'Ибатуллин Денис', '', 'Другова Светлана Андреевна']
 
     texts = []

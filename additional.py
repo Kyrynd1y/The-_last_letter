@@ -14,7 +14,7 @@ pygame.init()
 
 pygame.display.set_caption('Quick Start')
 
-window = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+window = data.window
 screen_size = window.get_size()
 print(screen_size)
 
@@ -26,11 +26,14 @@ x_w, y_w = window.get_size()
 x_w = x_w / 20
 y_w = y_w / 20
 
-coords_enemies = [(x_w * 5, y_w * 19, 'skeleton'), (x_w * 3, y_w * 15, 'skeleton'), (x_w * 14, y_w * 7, 'skeleton')]
+coords_enemies = [(x_w * 2, y_w * 9, 'skeleton'), (x_w * 15, y_w * 9, 'skeleton'), (x_w * 34, y_w * 5, 'skeleton'),
+                  (x_w * 23, y_w * 6, 'skeleton'),
+                  (x_w * 33.5, y_w * 12.7, 'skeleton')]
 
 bg = world.bg
 
 mob_sprites = pygame.sprite.Group()
+decor_sprites = pygame.sprite.Group()
 land_sprites = pygame.sprite.Group()
 button_sprites = pygame.sprite.Group()
 
@@ -41,12 +44,12 @@ settings_bool = False
 enemies = []
 
 hero = mobs.Hero(x_w * 0, y_w * 19, 'adventurer', mob_sprites, land_sprites, under.fight)
-
-play_butt = world.Button(200, 150, 'play', button_sprites)
-settings_butt = world.Button(200, 240, 'settings', button_sprites)
-exit_butt = world.Button(200, 330, 'exit', button_sprites)
+# 0, 19
+play_butt = world.Button(2.0833 * x_w, 2.7777 * y_w, 'play', button_sprites)
+settings_butt = world.Button(2.0833 * x_w, 4.444444 * y_w, 'settings', button_sprites)
+exit_butt = world.Button(2.0833 * x_w, 6.11111 * y_w, 'exit', button_sprites)
 new_game_butt = world.Button(0, 0, 'newgame', button_sprites)
-titles_butt = world.Button(200, 420, 'titles', button_sprites)
+titles_butt = world.Button(2.0833 * x_w, 7.777777 * y_w, 'titles', button_sprites)
 
 for i in coords_enemies:
     pos = (i[0], i[1])
@@ -58,29 +61,29 @@ for i in coords_enemies:
 class Settings:
     def __init__(self, manager):
         self.manager = manager
-        self.x, self.y = window.get_size()[0] // 2 - 200, window.get_size()[1] // 2 - 200
+        self.x, self.y = window.get_size()[0] // 2 - (2.0833 * x_w), window.get_size()[1] // 2 - (2.0833 * x_w)
         self.window_sett = pygame_gui.elements.UIWindow(
-            pygame.Rect(self.x, self.y, 400, 400),
+            pygame.Rect(self.x, self.y, 4.166666 * x_w, 7.407407 * y_w),
             manager=self.manager)
 
         self.lst_window_size = ['на весь экран', '4:3', '16:9', '16:10']
 
-        self.volume_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 20), (100, 50)),
+        self.volume_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0.104166 * x_w, 0.370370 * y_w), (1.041666 * x_w, 0.925925 * y_w)),
                                                         text='громкость',
                                                         manager=self.manager, container=self.window_sett)
-        self.volume_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((10, 70), (350, 20)),
+        self.volume_slider = pygame_gui.elements.UIHorizontalSlider(relative_rect=pygame.Rect((0.104166 * x_w, 1.296296 * y_w), (3.645833 * x_w, 0.370370 * y_w)),
                                                                     start_value=50,
                                                                     value_range=(0, 100),
                                                                     manager=self.manager, container=self.window_sett)
         self.value_volume = self.volume_slider.get_current_value()
-        self.volume_value_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((280, 20), (100, 50)),
+        self.volume_value_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((2.91666 * x_w, 0.370370 * y_w), (1.041666 * x_w, 0.926926 * y_w)),
                                                               text=str(self.value_volume) + '%',
                                                               manager=self.manager, container=self.window_sett)
 
-        self.resolution_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((10, 130), (140, 50)),
+        self.resolution_label = pygame_gui.elements.UILabel(relative_rect=pygame.Rect((0.104166 * x_w, 2.407407 * y_w), (1.458333 * x_w, 0.926926 * y_w)),
                                                             text='режим отображения',
                                                             manager=self.manager, container=self.window_sett)
-        self.resolution = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((170, 140), (150, 30)),
+        self.resolution = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect((1.7708333 * x_w, 2.5925925 * y_w), (1.5625 * x_w, 0.555555 * y_w)),
                                                              options_list=self.lst_window_size,
                                                              starting_option='на весь экран',
                                                              manager=self.manager, container=self.window_sett)
@@ -88,10 +91,10 @@ class Settings:
 
         self.value_ratio = self.resolution
 
-        self.ok_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((50, 280), (100, 40)), text='применить',
+        self.ok_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0.5208333 * x_w, 5.185185 * y_w), (1.041666 * x_w, 0.740740 * y_w)), text='применить',
                                                       manager=self.manager, container=self.window_sett)
 
-        self.cancel_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((220, 280), (100, 40)),
+        self.cancel_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((2.291666 * x_w, 5.185185 * y_w), (1.041666 * x_w, 0.740740 * y_w)),
                                                           text='отменить',
                                                           manager=self.manager, container=self.window_sett)
         self.comit_screen_size = screen_size
@@ -152,12 +155,12 @@ settings = Settings(manager)
 def menu():
     global menu_bool, settings_bool
     lst_txts = []
-    Height, Width = 500, 500
+    Height, Width = 5.208333 * x_w, 9.259259 * y_w
     pos = window.get_size()[0] // 2 - Width // 2, window.get_size()[1] // 2 - Height // 2
     rect = pygame.draw.rect(window, "darkGreen", (*pos, Width, Height))
     font = pygame.font.Font(None, 60)
-    text_y = rect.y + 40
-    text_x = rect.x + 250
+    text_y = rect.y + 0.740740 * y_w
+    text_x = rect.x + 2.6041666 * x_w
     count_y = rect.height // 5
     #    window.blit(data.menu_fon, pos)
     #    window.blit(data.menu_title, (text_x - 150, text_y - 80))
@@ -199,10 +202,10 @@ def zastavka():
     fon = pygame.transform.scale(zastavkaImg, window.get_size())
     window.blit(fon, (0, 0))
     font = pygame.font.Font(None, 70)
-    title = world.TxT("The last letter", font, (255, 77, 213), 200, 70)
-    play_butt.rect.center = 200, 150
-    settings_butt.rect.center = 200, 240
-    exit_butt.rect.center = 200, 330
+    title = world.TxT("The last letter", font, (255, 77, 213), 2.08333 * x_w, 1.296296 * y_w)
+    play_butt.rect.center = 2.08333 * x_w, 2.777777 * y_w
+    settings_butt.rect.center = 2.08333 * x_w, 4.444444 * y_w
+    exit_butt.rect.center = 2.08333 * x_w, 6.111111 * y_w
     new_game_butt.kill()
 
     if pygame.mouse.get_pressed()[0]:
@@ -243,11 +246,12 @@ def zastavka():
 
 def new_game_func():
     for i in range(len(enemies)):
-        enemies[i].rect.bottomleft = coords_enemies[i][0], coords_enemies[i][1] + 2
+        enemies[i].rect.bottomleft = coords_enemies[i][0], coords_enemies[i][1] + 0.0208333 * x_w
         enemies[i].live = True
         enemies[i].add(mob_sprites, land_sprites)
     under.fight = False
     hero.is_fight = False
     mob.is_fight = False
-    hero.rect.bottomleft = x_w * 0, y_w * 19
+    hero.rect.bottomleft = x_w * 0, y_w * 19.05
+    hero.jump_coords = hero.rect.y
     hero.hp = 3

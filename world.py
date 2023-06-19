@@ -1,17 +1,20 @@
+import data
 from data import *
 
-background = pygame.image.load('data/landshaft/BG1.png')
-background = pygame.transform.scale(background, (1920, 1080))
+screen_size = data.window.get_size()
 
-background2 = pygame.image.load('data/landshaft/BG2.png')
-background2 = pygame.transform.scale(background2, (1920, 1080))
+background = pygame.image.load('data/landshaft/BG1.png').convert_alpha()
+background = pygame.transform.scale(background, screen_size)
 
-background3 = pygame.image.load('data/landshaft/BG3.png')
-background3 = pygame.transform.scale(background3, (1920, 1080))
+background2 = pygame.image.load('data/landshaft/BG2.png').convert_alpha()
+background2 = pygame.transform.scale(background2, screen_size)
 
-un_background = pygame.image.load('data/landshaft/space.png')
+background3 = pygame.image.load('data/landshaft/BG3.png').convert_alpha()
+background3 = pygame.transform.scale(background3, screen_size)
 
-bg = pygame.Surface((1920, 1080))
+un_background = pygame.image.load('data/landshaft/space.png').convert_alpha()
+
+bg = pygame.Surface(screen_size)
 
 bg.blit(background, (0, 0))
 bg.blit(background2, (0, 0))
@@ -21,6 +24,14 @@ bg.blit(background3, (0, 0))
 class Platform(pygame.sprite.Sprite):
     def __init__(self, pos, image, land_sprites):
         super().__init__(land_sprites)
+        self.image = image
+        self.rect = self.image.get_rect()
+        self.rect.topleft = pos
+
+
+class Decoration(pygame.sprite.Sprite):
+    def __init__(self, pos, image, decor_sprites):
+        super().__init__(decor_sprites)
         self.image = image
         self.rect = self.image.get_rect()
         self.rect.topleft = pos

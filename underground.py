@@ -9,8 +9,8 @@ from world import *
 from copy import copy
 import random
 
-un_background = pygame.image.load('data/landshaft/space.png')
-bg_under = pygame.Surface((1920, 1080))
+un_background = pygame.image.load('data/landshaft/space.png').convert_alpha()
+bg_under = pygame.Surface(screen_size)
 bg_under.blit(un_background, (0, 0))
 
 letter_group = pygame.sprite.Group()
@@ -22,7 +22,7 @@ class Underground(pygame.sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
         self.fight = False
-        self.bgr = pygame.image.load('data/landshaft/space.png')
+        self.bgr = pygame.image.load('data/landshaft/space.png').convert_alpha()
 
     def load_fight_lvl(self, window):
         window.blit(self.bgr, (0, 0))
@@ -74,11 +74,11 @@ class Letter(pygame.sprite.Sprite):
 def creating_letters(word, x_w, y_w):
     coef_start_pos = 4
     for l in word:
-        temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png')
-        temp = pygame.transform.scale(temp, (60, 60))
+        temp = pygame.image.load(f'data/R_Letters/Letter_{l}.png').convert_alpha()
+        temp = pygame.transform.scale(temp, (0.625 * x_w, 1.111111 * y_w))
         ltr = Letter(l, temp, letter_group)
         ltr.rect.topleft = x_w * coef_start_pos, y_w
         ltr.topleft = ltr.rect.topleft
         ltr.add(letter_group)
-        coef_start_pos += 1
+        coef_start_pos += 0.01041666 * x_w
         ltrs.append(ltr)
